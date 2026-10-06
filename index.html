@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TYPE INDONESIA – Tes Kecepatan Mengetik</title>
+<style>
+:root{
+  --bg:#f4f5fa;--card:#fff;--ink:#16213a;--mut:#667089;--line:#e0e4ef;
+  --acc:#3358e6;--acc-soft:#dfe6ff;--ok:#1b9a58;--bad:#d7263d;--bad-soft:#fde3e6;
+  --onacc:#fff;--font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+:root[data-theme="dark"]{
+  --bg:#0e1320;--card:#161d2d;--ink:#e8ecf7;--mut:#93a0bd;--line:#273049;
+  --acc:#8aa0ff;--acc-soft:#26315a;--ok:#4ccf8a;--bad:#ff6b7d;--bad-soft:#3d2230;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.5;min-height:100vh;transition:background .25s,color .25s}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+
+/* Navbar */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:960px;margin:0 auto;padding:16px 20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.04em;text-decoration:none;color:var(--ink)}
+.logo i{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--acc);color:var(--onacc);font-style:normal;font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.menu{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.menu a{padding:8px 14px;border-radius:8px;color:var(--mut);text-decoration:none;font-weight:600}
+.menu a:hover{color:var(--ink)}
+.menu a.active{color:var(--ink);background:var(--card);box-shadow:0 0 0 1px var(--line)}
+.theme{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 12px;font-weight:600}
+
+main{max-width:960px;margin:0 auto;padding:8px 20px 48px}
+.page{display:none}.page.show{display:block}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);margin:20px 0 6px;letter-spacing:-.02em;line-height:1.15}
+.sub{color:var(--mut);margin:0 0 24px}
+
+/* Opsi */
+.opts{display:flex;flex-wrap:wrap;gap:12px 28px;margin-bottom:16px}
+.grp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grp b{font-size:.9rem;color:var(--mut);font-weight:600;margin-right:2px}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;padding:7px 14px;border-radius:7px;font-weight:600;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--onacc)}
+
+/* Statistik realtime */
+.live{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat span{display:block;font-size:.78rem;color:var(--mut)}
+.stat strong{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.stat.timer strong{color:var(--acc)}
+.stat.timer.low strong{color:var(--bad)}
+
+/* Area tes */
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.words{height:9rem;overflow:hidden;position:relative;scroll-behavior:smooth;cursor:text;font-size:1.6rem;line-height:3rem;user-select:none}
+.w{display:inline-block;height:3rem;line-height:3rem;margin:0 .15rem;padding:0 .4rem;border-radius:7px;color:var(--mut)}
+.w.cur{background:var(--acc-soft);color:var(--ink);box-shadow:inset 0 -3px 0 var(--acc)}
+.w.cur.err{background:var(--bad-soft);box-shadow:inset 0 -3px 0 var(--bad)}
+.w.ok{color:var(--ok)}
+.w.bad{color:var(--bad);text-decoration:line-through}
+.row{display:flex;gap:10px;margin-top:14px}
+#input{flex:1;min-width:0;font:inherit;font-size:1.4rem;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+#input:focus{outline:none;border-color:var(--acc)}
+#input:disabled{opacity:.5}
+.btn{border:0;background:var(--acc);color:var(--onacc);font-weight:700;padding:12px 22px;border-radius:12px}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.hint{color:var(--mut);font-size:.85rem;margin:10px 2px 0}
+
+/* Hasil */
+.result{text-align:center;padding:28px 18px}
+.result h2{margin:0;color:var(--mut);font-size:1rem;letter-spacing:.08em}
+.big{font-size:clamp(3.5rem,14vw,6rem);font-weight:800;line-height:1.05;margin:8px 0 0;font-variant-numeric:tabular-nums}
+.big small{font-size:.3em;color:var(--mut);margin-left:6px}
+.acc{font-size:1.3rem;font-weight:700;color:var(--acc);margin:4px 0 18px}
+.badge{display:inline-block;background:var(--ok);color:#fff;font-weight:700;border-radius:99px;padding:4px 14px;margin-bottom:14px;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:460px;margin:0 auto 22px}
+.rgrid div{background:var(--bg);border-radius:12px;padding:12px}
+.rgrid span{display:block;color:var(--mut);font-size:.8rem}
+.rgrid strong{font-size:1.3rem}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* Halaman statistik & tentang */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.cards .stat strong{font-size:1.8rem}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-size:.82rem;font-weight:600}
+.tbl{overflow-x:auto}
+.empty{color:var(--mut);padding:10px 0}
+.prose p,.prose li{max-width:68ch}
+.prose h2{margin-top:0}
+code{background:var(--bg);padding:2px 6px;border-radius:6px}
+
+@media (max-width:640px){
+  .live{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .words{font-size:1.2rem;line-height:2.4rem;height:7.2rem}
+  .w{height:2.4rem;line-height:2.4rem}
+  .row{flex-direction:column}
+  #input{font-size:1.2rem}
+  .btn{width:100%}
+  .nav{padding:12px 14px}
+  main{padding:4px 14px 40px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+[hidden]{display:none!important}
+:root[data-theme="dark"]{--onacc:#0e1320}
+:root[data-theme="classic"]{--bg:#ece6d6;--card:#faf6ea;--ink:#3b3226;--mut:#7a6e5c;--line:#d8cfb8;--acc:#8a5a2b;--acc-soft:#ecdcc0;--ok:#3f7d3a;--bad:#b3361f;--bad-soft:#f3d8cf}
+:root[data-theme="lemondrop"]{--bg:#fffbd6;--card:#fffef0;--ink:#2c2a10;--mut:#7b7740;--line:#ece6a0;--acc:#f2b705;--onacc:#2c2a10;--acc-soft:#fff1a3;--ok:#3a8f2a;--bad:#d6361f;--bad-soft:#ffe0d6}
+:root[data-theme="glow"]{--bg:#0a0618;--card:#150d2b;--ink:#f1eaff;--mut:#a898d4;--line:#2e1f5c;--acc:#25e8ff;--onacc:#07121a;--acc-soft:#1b2b5e;--ok:#5bff9a;--bad:#ff4d8d;--bad-soft:#3a1233}
+:root[data-theme="glow"] .w.cur{box-shadow:0 0 16px var(--acc),inset 0 -3px 0 var(--acc)}
+:root[data-theme="valentine"]{--bg:#fff0f3;--card:#fff;--ink:#4a1226;--mut:#a0546f;--line:#f7cfd9;--acc:#e11d5a;--acc-soft:#ffd6e2;--ok:#1b9a58;--bad:#b4121f;--bad-soft:#ffe0e5}
+.left{display:flex;align-items:center;gap:10px}
+.ibtn{border:1px solid var(--line);background:var(--card);border-radius:8px;width:40px;height:40px;font-size:1.15rem;transition:background .2s}
+.ibtn:hover{background:var(--acc-soft)}
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:40}
+#scrim.on{opacity:1;pointer-events:auto}
+#side{position:fixed;top:0;left:0;bottom:0;width:300px;max-width:100%;background:var(--card);border-right:1px solid var(--line);transform:translateX(-102%);visibility:hidden;transition:transform .3s ease,visibility 0s .3s;z-index:50;overflow-y:auto;padding:16px}
+#side.on{transform:none;visibility:visible;transition:transform .3s ease}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.sg{font-size:.78rem;color:var(--mut);font-weight:700;margin:20px 8px 6px;letter-spacing:.06em}
+#side a{display:block;padding:10px 12px;border-radius:9px;color:var(--ink);text-decoration:none;font-weight:600;transition:background .15s,transform .15s}
+#side a:hover{background:var(--acc-soft);transform:translateX(3px)}
+#side a.active{background:var(--acc);color:var(--onacc)}
+.themewrap{position:relative}
+.panel{position:absolute;right:0;top:46px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;width:230px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.panel button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:8px;border-radius:8px;text-align:left}
+.panel button:hover,.panel button[aria-pressed="true"]{background:var(--acc-soft)}
+.panel i{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);flex:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.card h3{margin:0 0 6px}.card p{margin:0 0 8px;color:var(--mut)}
+.tag{display:inline-block;font-size:.78rem;background:var(--acc-soft);border-radius:99px;padding:2px 10px}
+.in{font:inherit;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.in:focus{outline:none;border-color:var(--acc)}
+.f{display:grid;gap:12px;max-width:480px}.f label{display:grid;gap:4px;font-weight:600}
+.fl{display:flex;gap:10px;align-items:center;margin-bottom:12px;font-weight:600}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:700}details p{color:var(--mut);margin:8px 0 0}
+.bar{height:14px;background:var(--bg);border-radius:9px;overflow:hidden;margin:4px 0 12px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .15s}
+mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px}
+.chat{height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.msg{background:var(--bg);border-radius:10px;padding:8px 12px;max-width:85%;word-break:break-word}
+.msg b{color:var(--acc)}.msg.me{align-self:flex-end}
+#ck{position:fixed;left:12px;right:12px;bottom:12px;max-width:560px;margin:auto;z-index:60;display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+#ck p{margin:0;font-size:.9rem}
+@media (max-width:760px){.menu a{display:none}}
+@media (max-width:640px){#side{width:100%;border-right:0}#ck{flex-direction:column;align-items:stretch}}
+
+.btn.sm{padding:8px 16px}
+.profwrap{position:relative}
+.pbtn{display:flex;align-items:center;gap:8px}
+.av{width:26px;height:26px;border-radius:50%;object-fit:cover;display:inline-grid;place-items:center;background:var(--acc);color:var(--onacc);font-weight:700;font-size:.8rem;flex:none}
+#profName{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pm{margin:4px 8px 8px;color:var(--mut);font-size:.85rem;word-break:break-all}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;z-index:70}
+.mbox{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px 22px;width:100%;max-width:400px;max-height:100%;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.modal:not([hidden]) .mbox{animation:pop .25s ease}
+.mbox h2{margin:0 0 4px}.mbox .sub{margin:0 0 16px}
+.mclose{position:absolute;top:12px;right:12px}
+.pw{position:relative;display:block}.pw .in{width:100%;padding-right:46px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:1.1rem;padding:6px 8px}
+.lgmsg{margin:0;min-height:1.2em;color:var(--bad);font-weight:600;font-size:.9rem}
+.or{text-align:center;color:var(--mut);font-size:.85rem}
+.gbtn{width:100%;display:flex;justify-content:center;align-items:center;gap:10px}
+.gbtn b{color:#4285f4;font-size:1.1rem}
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-24px);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:90;background:var(--ok);color:#fff;font-weight:700;padding:10px 18px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:92vw;text-align:center}
+.toast.bad{background:var(--bad)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:480px){#profName{display:none}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="left">
+    <button class="ibtn" id="menuBtn" type="button" aria-label="Buka menu" aria-expanded="false">☰</button>
+    <a class="logo" href="#typing"><i>T</i>TYPE INDONESIA</a>
+  </div>
+  <nav class="menu" aria-label="Menu utama">
+    <a href="#typing" data-page="typing" data-en="Typing Test">Tes Mengetik</a>
+    <a href="#statistik" data-page="statistik" data-en="Statistics">Statistik</a>
+    <a href="#tentang" data-page="tentang" data-en="About">Tentang</a>
+    <div class="themewrap"><button class="theme" id="themeBtn" type="button" aria-haspopup="true">🎨 Tema</button><div class="panel" id="themePanel" hidden></div></div>
+    <button class="btn sm" id="loginBtn" type="button">Login</button>
+    <div class="profwrap" id="profile" hidden>
+      <button class="theme pbtn" id="profBtn" type="button" aria-haspopup="true"><img class="av" id="profImg" alt="" referrerpolicy="no-referrer" hidden><span class="av" id="profIni"></span><span id="profName"></span></button>
+      <div class="panel" id="profMenu" hidden><p class="pm" id="profMail"></p><button type="button" id="logoutBtn">Logout</button></div>
+    </div>
+  </nav>
+</header>
+<aside id="side" aria-label="Menu navigasi"></aside>
+<div id="scrim"></div>
+
+<main>
+  <!-- HALAMAN TES -->
+  <section class="page" id="page-typing">
+    <h1 data-en="Typing Speed Test">Tes Kecepatan Mengetik</h1>
+    <p class="sub" data-en="Test your Indonesian typing speed and accuracy">Uji kecepatan dan akurasi mengetik Bahasa Indonesia</p>
+    <p class="hint" id="modeNote" hidden></p>
+
+    <div class="opts">
+      <div class="grp" id="timeGrp"><b data-en="Time">Waktu</b>
+        <div class="seg">
+          <button type="button" data-time="15" aria-pressed="false">15 detik</button>
+          <button type="button" data-time="30" aria-pressed="false">30 detik</button>
+          <button type="button" data-time="60" aria-pressed="true">60 detik</button>
+          <button type="button" data-time="120" aria-pressed="false">120 detik</button>
+        </div>
+      </div>
+      <div class="grp" id="modeGrp"><b data-en="Mode">Mode</b>
+        <div class="seg">
+          <button type="button" data-mode="normal" aria-pressed="true">Normal</button>
+          <button type="button" data-mode="lanjutan" aria-pressed="false">Lanjutan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="testView">
+      <div class="live" aria-live="off">
+        <div class="stat"><span>KPM / WPM</span><strong id="sWpm">0</strong></div>
+        <div class="stat"><span>Akurasi</span><strong id="sAcc">0%</strong></div>
+        <div class="stat"><span>Karakter benar</span><strong id="sOk">0</strong></div>
+        <div class="stat"><span>Karakter salah</span><strong id="sBad">0</strong></div>
+        <div class="stat timer"><span>Sisa waktu</span><strong id="sTime">60</strong></div>
+      </div>
+      <div class="box">
+        <div class="words" id="words"></div>
+        <div class="row">
+          <input id="input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Mulai mengetik di sini…" aria-label="Ketik kata di sini">
+          <button class="btn ghost" id="restartBtn" type="button">Ulangi</button>
+        </div>
+        <p class="hint" id="hint">Timer mulai otomatis saat kamu mengetik. Tekan spasi untuk pindah ke kata berikutnya, Esc untuk mengulang.</p>
+      </div>
+    </div>
+
+    <div id="resultView" class="box result" hidden>
+      <h2>HASIL TES</h2>
+      <div class="big"><span id="rWpm">0</span><small>WPM</small></div>
+      <div class="acc">Akurasi <span id="rAcc">0%</span></div>
+      <div id="rBadge"></div>
+      <div class="rgrid">
+        <div><span>Karakter benar</span><strong id="rOk">0</strong></div>
+        <div><span>Karakter salah</span><strong id="rBad">0</strong></div>
+        <div><span>Total kata</span><strong id="rWords">0</strong></div>
+        <div><span>Waktu</span><strong id="rTime">0 detik</strong></div>
+      </div>
+      <div class="btns">
+        <button class="btn" id="againBtn" type="button">COBA LAGI</button>
+        <button class="btn ghost" id="toStatBtn" type="button">Lihat statistik</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN STATISTIK -->
+  <section class="page" id="page-statistik">
+    <h1>Statistik</h1>
+    <p class="sub">Hasil tes disimpan di browser ini saja.</p>
+    <div class="cards">
+      <div class="stat"><span>Best WPM</span><strong id="tBest">0</strong></div>
+      <div class="stat"><span>Best Accuracy</span><strong id="tAcc">0%</strong></div>
+      <div class="stat"><span>Jumlah tes</span><strong id="tCount">0</strong></div>
+      <div class="stat"><span>Rata-rata WPM</span><strong id="tAvg">0</strong></div>
+    </div>
+    <div class="box">
+      <div class="tbl" id="history"></div>
+      <div class="btns" style="justify-content:flex-start;margin-top:14px">
+        <button class="btn ghost" id="clearBtn" type="button">Hapus statistik</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN TENTANG -->
+  <section class="page" id="page-tentang">
+    <h1>Tentang</h1>
+    <div class="box prose">
+      <p><b>TYPE INDONESIA</b> adalah tes mengetik berbahasa Indonesia yang berjalan sepenuhnya di browser, tanpa internet, tanpa login, dan tanpa database.</p>
+      <h2>Cara menggunakan</h2>
+      <ol>
+        <li>Pilih waktu dan mode.</li>
+        <li>Klik kolom input lalu ketik kata yang disorot.</li>
+        <li>Tekan spasi untuk memeriksa kata dan lanjut ke kata berikutnya.</li>
+        <li>Saat waktu habis, hasil tes tampil otomatis.</li>
+      </ol>
+      <h2>Mode</h2>
+      <p><b>Normal</b> memakai kata huruf kecil. <b>Lanjutan</b> menambah huruf kapital dan tanda baca (koma dan titik).</p>
+      <h2>Rumus</h2>
+      <p>WPM = (karakter benar ÷ 5) ÷ waktu dalam menit.<br>
+      Akurasi = karakter benar ÷ total karakter yang diketik × 100.<br>
+      Spasi setelah kata dihitung sebagai karakter. Kata yang salah dihitung sebagai karakter salah.</p>
+    </div>
+  </section>
+
+  <section class="page" id="page-competition"><h1 data-en="Typing Competition">Kompetisi Mengetik</h1><p class="sub">Peringkat berisi data contoh. Hasil terbaikmu ikut masuk daftar.</p>
+    <div class="box"><label class="fl">Nama kamu <input class="in" id="cName" maxlength="16"></label><div class="tbl" id="compTbl"></div></div></section>
+
+  <section class="page" id="page-practice"><h1 data-en="Practice Texts">Teks Latihan</h1><p class="sub">Pilih tingkat, lalu ketik satu teks sampai selesai.</p>
+    <div class="box"><div class="seg" id="pCat"><button type="button" data-c="pemula" aria-pressed="true">Pemula</button><button type="button" data-c="menengah" aria-pressed="false">Menengah</button><button type="button" data-c="sulit" aria-pressed="false">Sulit</button></div>
+    <p id="pvText" style="font-size:1.2rem;margin:16px 0"></p>
+    <div class="btns" style="justify-content:flex-start"><button class="btn" id="pStart" type="button">Mulai Latihan</button><button class="btn ghost" id="pNext" type="button">Teks lain</button></div></div></section>
+
+  <section class="page" id="page-multiplayer"><h1>Multiplayer Typing</h1><p class="sub">Mode demo: lawanmu adalah bot simulasi di perangkat ini. Belum ada server online.</p>
+    <div class="box"><div class="btns" style="justify-content:space-between"><button class="btn" id="mpFind" type="button">Cari Lawan</button><span id="mpRec"></span></div>
+    <p id="mpStatus" class="hint">Tekan "Cari Lawan" untuk mulai.</p>
+    <p id="mpMeT">Kamu</p><div class="bar"><i id="mpMe"></i></div>
+    <p id="mpOpp">Lawan</p><div class="bar"><i id="mpBot"></i></div>
+    <p id="mpText" style="font-size:1.3rem;line-height:2"></p>
+    <input class="in" id="mpIn" disabled placeholder="Ketik kata lalu tekan spasi" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%"></div></section>
+
+  <section class="page" id="page-custom"><h1 data-en="Custom Mode">Mode Kustom</h1><p class="sub">Atur tesmu sendiri.</p>
+    <div class="box"><div class="f">
+      <label>Durasi<select class="in" id="cuT"><option value="15">15 detik</option><option value="30">30 detik</option><option value="60" selected>60 detik</option><option value="120">120 detik</option></select></label>
+      <label>Jumlah kata<select class="in" id="cuN"><option>25</option><option>50</option><option selected>100</option><option>200</option></select></label>
+      <label>Bahasa<select class="in" id="cuL"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select></label>
+      <label>Tingkat kesulitan<select class="in" id="cuD"><option value="mudah">Mudah (kata pendek)</option><option value="sedang" selected>Sedang</option><option value="sulit">Sulit (kata panjang, kapital, tanda baca)</option></select></label>
+      <button class="btn" id="cuGo" type="button">Mulai Tes</button></div></div></section>
+
+  <section class="page" id="page-hangout"><h1>Hangout</h1><p class="sub">Selamat datang! Ngobrol santai soal mengetik. Pesan hanya tersimpan di browser ini.</p>
+    <div class="box"><div class="chat" id="chat"></div>
+    <div class="row"><input class="in" id="chIn" maxlength="200" placeholder="Tulis pesan…" style="flex:1;min-width:0"><button class="btn" id="chSend" type="button">Kirim</button></div></div></section>
+
+  <section class="page" id="page-blog"><h1>Blog</h1><p class="sub">Tips mengetik untuk pemula sampai mahir.</p><div class="grid">
+    <article class="card"><span class="tag">Dasar</span><h3>Posisi tangan yang benar</h3><p>Letakkan jari di baris tengah keyboard.</p><details><summary>Baca selengkapnya</summary><p>Taruh jari telunjuk di huruf F dan J, lalu biarkan jari lain mengikuti. Pergelangan tangan sebaiknya lurus dan tidak menumpu keras di meja.</p></details></article>
+    <article class="card"><span class="tag">Latihan</span><h3>Akurasi dulu, kecepatan menyusul</h3><p>Mengetik pelan tapi benar melatih ingatan jari.</p><details><summary>Baca selengkapnya</summary><p>Targetkan akurasi di atas 95% sebelum menaikkan tempo. Kecepatan akan naik sendiri saat jari sudah hafal letak tombol.</p></details></article>
+    <article class="card"><span class="tag">Kebiasaan</span><h3>Latihan 10 menit setiap hari</h3><p>Sesi pendek tapi rutin lebih efektif.</p><details><summary>Baca selengkapnya</summary><p>Gunakan teks latihan bertingkat, catat WPM di halaman Statistik, dan rayakan setiap rekor baru.</p></details></article></div></section>
+
+  <section class="page" id="page-faq"><h1>FAQ</h1><p class="sub">Pertanyaan yang sering diajukan.</p>
+    <details><summary>Apa itu WPM?</summary><p>WPM (words per minute) adalah jumlah kata per menit. Satu kata dihitung sebagai 5 karakter, sehingga WPM = (karakter benar ÷ 5) ÷ menit.</p></details>
+    <details><summary>Bagaimana cara menghitung akurasi?</summary><p>Akurasi = karakter benar ÷ total karakter yang diketik × 100.</p></details>
+    <details><summary>Bagaimana cara meningkatkan kecepatan mengetik?</summary><p>Latih posisi sepuluh jari, jaga akurasi, jangan melihat keyboard, dan berlatih singkat tapi rutin.</p></details>
+    <details><summary>Apakah hasil tes disimpan?</summary><p>Ya, di localStorage browser ini saja. Data tidak dikirim ke server mana pun dan bisa dihapus di halaman Statistik atau Jejak.</p></details></section>
+
+  <section class="page" id="page-feedback"><h1>Masukan</h1><p class="sub">Beri saran atau laporkan masalah.</p>
+    <div class="box"><div class="f"><label>Nama<input class="in" id="fbN"></label><label>Email<input class="in" id="fbE" type="email"></label><label>Pesan<textarea class="in" id="fbM" rows="4"></textarea></label>
+    <button class="btn" id="fbSend" type="button">Kirim</button><p id="fbOut" role="status" style="margin:0;font-weight:700"></p></div></div></section>
+
+  <section class="page" id="page-translate"><h1 data-en="Translate">Terjemahkan</h1><p class="sub">Pilih bahasa antarmuka. Menu dan judul utama ikut berubah.</p>
+    <div class="box"><div class="seg" id="lgGrp"><button type="button" data-l="id" aria-pressed="true">Bahasa Indonesia</button><button type="button" data-l="en" aria-pressed="false">English</button></div></div></section>
+
+  <section class="page" id="page-footprint"><h1 data-en="Footprint">Jejak</h1><p class="sub">Data yang disimpan website ini di browsermu.</p>
+    <div class="box"><div class="tbl" id="footBox"></div><div class="btns" style="justify-content:flex-start;margin-top:14px"><button class="btn ghost" id="footClear" type="button">Hapus semua data lokal</button></div></div></section>
+
+  <section class="page" id="page-privacy"><h1 data-en="Privacy">Privasi</h1><div class="box prose"><p>TYPE INDONESIA tidak memiliki server, akun, iklan, maupun pelacak. Semua data (hasil tes, tema, bahasa, nama, pesan, masukan) hanya disimpan di localStorage browsermu dan tidak dikirim ke mana pun.</p><p>Kamu bisa menghapus semuanya kapan saja lewat halaman Jejak.</p></div></section>
+
+  <section class="page" id="page-cookies"><h1 data-en="Cookie Policy">Kebijakan Cookie</h1><div class="box prose"><p>Website ini tidak memakai cookie. Yang dipakai adalah localStorage untuk menyimpan preferensi dan hasil tesmu di perangkat ini.</p><p id="ckSt"></p><button class="btn ghost" id="ckReset" type="button">Reset persetujuan</button></div></section>
+
+  <section class="page" id="page-links"><h1>Links</h1><p class="sub">Kartu informasi. URL tujuan masih berupa placeholder.</p><div class="grid">
+    <div class="card"><h3>Build, Launch and Grow</h3><p>Panduan membangun dan mengembangkan proyek digital.</p><span class="tag">Placeholder: belum ada URL</span></div>
+    <div class="card"><h3>Brain Training Games</h3><p>Game untuk melatih fokus dan refleks.</p><span class="tag">Placeholder: belum ada URL</span></div>
+    <div class="card"><h3>Mobile Typing App</h3><p>Aplikasi latihan mengetik untuk HP.</p><span class="tag">Placeholder: belum ada URL</span></div>
+    <div class="card"><h3>Online Text Tools</h3><p>Alat bantu teks: hitung kata, ubah huruf, dan lainnya.</p><span class="tag">Placeholder: belum ada URL</span></div></div></section>
+</main>
+<div id="ck" hidden><p>Website ini menyimpan preferensi dan hasil tes di localStorage browsermu.</p><button class="btn" id="ckOk" type="button">Mengerti</button></div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="loginModal" hidden role="dialog" aria-modal="true" aria-labelledby="lgTitle">
+  <div class="mbox">
+    <button class="ibtn mclose" id="lgClose" type="button" aria-label="Tutup">✕</button>
+    <h2 id="lgTitle">Login</h2>
+    <p class="sub">Masuk dengan akun JOSEI kamu.</p>
+    <div class="f">
+      <label>Email<input class="in" id="lgEmail" type="email" autocomplete="email" placeholder="nama@email.com"></label>
+      <label>Password<span class="pw"><input class="in" id="lgPass" type="password" autocomplete="current-password" placeholder="Password"><button class="eye" id="lgEye" type="button" aria-label="Tampilkan password">👁</button></span></label>
+      <p class="lgmsg" id="lgMsg" role="alert"></p>
+      <button class="btn" id="lgSubmit" type="button">Login</button>
+      <div class="or">atau</div>
+      <button class="btn ghost gbtn" id="lgGoogle" type="button"><b>G</b> Login dengan Google</button>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById("loginBtn").addEventListener("click",function(){if(window.__fb)return;var t=document.getElementById("toast");t.textContent="Layanan login belum termuat. Periksa internet lalu muat ulang halaman.";t.className="toast bad on";setTimeout(function(){t.classList.remove("on")},3500);});
+</script>
+<script>
+(function () {
+  "use strict";
+
+  /* ========== DAFTAR KATA (mudah diedit) ========== */
+  var WORD_LIST = (
+    "saya kamu dia mereka kita kami anda itu ini sana " +
+    "sini mana apa siapa kapan dimana bagaimana mengapa berapa yang " +
+    "dan atau tetapi namun karena sebab sehingga agar supaya jika " +
+    "kalau ketika saat sebelum sesudah setelah sambil hingga sampai dengan " +
+    "untuk dari pada dalam oleh bagi tentang antara terhadap seperti " +
+    "adalah akan sudah belum sedang telah masih pernah selalu sering " +
+    "jarang kadang tidak bukan jangan bisa dapat harus boleh mau " +
+    "ingin perlu harap hendak lagi juga hanya saja pun lebih " +
+    "sangat paling kurang cukup sekali banyak sedikit semua setiap beberapa " +
+    "satu dua tiga empat lima enam tujuh delapan sembilan sepuluh " +
+    "rumah sekolah kelas guru murid buku pena meja kursi papan " +
+    "kota desa jalan pasar toko kantor taman sungai gunung laut " +
+    "pantai hutan sawah kebun langit bumi matahari bulan bintang awan " +
+    "hujan angin api air tanah batu pohon bunga daun buah " +
+    "makan minum tidur bangun mandi duduk berdiri berjalan berlari melompat " +
+    "membaca menulis berbicara mendengar melihat berpikir belajar mengajar bermain bekerja " +
+    "pergi datang pulang masuk keluar naik turun buka tutup ambil " +
+    "beri bawa kirim terima beli jual bayar pinjam simpan cari " +
+    "temukan lupa ingat tahu paham kenal sebut tanya jawab ajak " +
+    "bantu tolong coba mulai selesai lanjut berhenti tunggu lihat dengar " +
+    "besar kecil panjang pendek tinggi rendah luas sempit berat ringan " +
+    "baru lama muda tua cepat lambat mudah sulit dekat jauh " +
+    "baik buruk indah cantik tampan bersih kotor panas dingin hangat " +
+    "sejuk terang gelap kuat lemah keras lembut manis asin pahit " +
+    "merah biru hijau kuning putih hitam coklat kelabu ungu jingga " +
+    "ayah ibu kakak adik nenek kakek paman bibi teman sahabat " +
+    "tetangga keluarga anak orang manusia lelaki perempuan bayi remaja dewasa " +
+    "negara bangsa rakyat bahasa budaya sejarah ilmu sains alam lingkungan " +
+    "pendidikan kesehatan ekonomi politik hukum agama seni musik olahraga teknologi " +
+    "komputer telepon internet layar tombol ketik kabel aplikasi program data " +
+    "pagi siang sore malam hari minggu tahun waktu jam menit " +
+    "detik kemarin besok sekarang nanti tadi dulu kelak akhirnya " +
+    "pertama kedua ketiga terakhir tengah depan belakang kiri kanan samping " +
+    "atas bawah luar utara selatan timur barat pusat sekitar " +
+    "makanan minuman nasi roti telur ikan ayam daging sayur " +
+    "sambal garam gula kopi teh susu jeruk pisang mangga kelapa " +
+    "mobil motor sepeda kereta pesawat kapal bus sepatu baju tas " +
+    "harga uang gaji usaha kerja tugas ujian nilai juara hadiah " +
+    "cerita berita surat pesan kabar tulisan kalimat kata huruf angka " +
+    "senang sedih marah takut berani malu rindu cinta sayang harapan " +
+    "sehat sakit lelah segar lapar haus kenyang bahagia tenang gembira " +
+    "pikiran perasaan impian kenangan tujuan rencana hasil masalah jawaban"
+  ).split(" ").filter(function (w, i, a) { return w && a.indexOf(w) === i; });
+
+  /* ========== HELPER ========== */
+  var $ = function (id) { return document.getElementById(id); };
+  var STORE_KEY = "typeindonesia_results";
+  var THEME_KEY = "typeindonesia_theme";
+
+  function store(op, key, val) {
+    try {
+      if (op === "get") return localStorage.getItem(key);
+      if (op === "set") localStorage.setItem(key, val);
+      if (op === "del") localStorage.removeItem(key);
+    } catch (e) {}
+    return null;
+  }
+  function loadResults() {
+    try {
+      var d = JSON.parse(store("get", STORE_KEY) || "[]");
+      return Array.isArray(d) ? d : [];
+    } catch (e) { return []; }
+  }
+  function safe(n) { return isFinite(n) && n > 0 ? n : 0; }
+
+  /* ========== STATE ========== */
+  var S = {};
+  var cfg = { time: 60, mode: "normal" };
+  var el = {
+    words: $("words"), input: $("input"),
+    sWpm: $("sWpm"), sAcc: $("sAcc"), sOk: $("sOk"), sBad: $("sBad"), sTime: $("sTime"),
+    testView: $("testView"), resultView: $("resultView")
+  };
+  var timerId = null;
+
+  function resetState() {
+    S = { words: [], spans: [], idx: 0, started: false, ended: false,
+          ok: 0, bad: 0, okWords: 0, badWords: 0, startAt: 0 };
+  }
+
+  /* ========== KATA ACAK ========== */
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function makeWords(count) {
+    var out = [];
+    while (out.length < count) {
+      var batch = shuffle(WORD_LIST);
+      if (out.length && batch[0] === out[out.length - 1]) batch.push(batch.shift());
+      out = out.concat(batch);
+    }
+    out = out.slice(0, count);
+    if (cfg.mode === "lanjutan") {
+      out = out.map(function (w) {
+        if (Math.random() < 0.25) w = w.charAt(0).toUpperCase() + w.slice(1);
+        var r = Math.random();
+        if (r < 0.1) w += ",";
+        else if (r < 0.17) w += ".";
+        return w;
+      });
+    }
+    return out;
+  }
+  function appendWords(list) {
+    list.forEach(function (w) {
+      var s = document.createElement("span");
+      s.className = "w";
+      s.textContent = w;
+      el.words.appendChild(s);
+      el.words.appendChild(document.createTextNode(" "));
+      S.words.push(w);
+      S.spans.push(s);
+    });
+  }
+
+  /* ========== STATISTIK ========== */
+  function calc(seconds) {
+    var minutes = seconds / 60;
+    var wpm = minutes > 0 ? (S.ok / 5) / minutes : 0;
+    var total = S.ok + S.bad;
+    var acc = total > 0 ? (S.ok / total) * 100 : 0;
+    return { wpm: Math.round(safe(wpm)), acc: Math.round(safe(acc)) };
+  }
+  function elapsed() { return S.started ? (Date.now() - S.startAt) / 1000 : 0; }
+
+  function paintLive() {
+    var e = Math.max(elapsed(), 1); // hindari lonjakan di detik pertama
+    var c = calc(S.started ? e : 0);
+    el.sWpm.textContent = S.started ? c.wpm : 0;
+    el.sAcc.textContent = c.acc + "%";
+    el.sOk.textContent = S.ok;
+    el.sBad.textContent = S.bad;
+  }
+  function paintTime(left) {
+    var v = Math.max(0, Math.ceil(left));
+    el.sTime.textContent = v;
+    el.sTime.parentNode.classList.toggle("low", S.started && v <= 5);
+  }
+
+  /* ========== ALUR TES ========== */
+  function markCurrent() {
+    var s = S.spans[S.idx];
+    if (!s) return;
+    s.classList.add("cur");
+    var lh = s.offsetHeight || 48;
+    if (s.offsetTop - el.words.scrollTop >= lh - 2) el.words.scrollTop = s.offsetTop;
+  }
+
+  function startTimer() {
+    S.started = true;
+    S.startAt = Date.now();
+    timerId = setInterval(function () {
+      var left = cfg.time - elapsed();
+      if (left <= 0) { finish(); return; }
+      paintTime(left);
+      paintLive();
+    }, 200);
+  }
+
+  function submitWord(typed) {
+    var target = S.words[S.idx];
+    var span = S.spans[S.idx];
+    var correct = typed === target;
+    span.classList.remove("cur", "err");
+    span.classList.add(correct ? "ok" : "bad");
+    if (correct) { S.ok += target.length + 1; S.okWords++; }
+    else { S.bad += typed.length + 1; S.badWords++; }
+    S.idx++;
+    if (!cfg.gen && S.idx > S.words.length - 60) appendWords(makeWords(150));
+    if (S.idx >= S.words.length) { markCurrent(); paintLive(); finish(true); return; }
+    markCurrent();
+    paintLive();
+  }
+
+  function onInput() {
+    if (S.ended) return;
+    var v = el.input.value;
+    if (!S.started && v.trim().length > 0) startTimer();
+    var sp = v.indexOf(" ");
+    if (sp !== -1) {
+      var typed = v.slice(0, sp);
+      el.input.value = "";
+      if (typed.length > 0) submitWord(typed);
+      return;
+    }
+    var cur = S.spans[S.idx];
+    if (cur) cur.classList.toggle("err", S.words[S.idx].indexOf(v) !== 0);
+  }
+
+  function finish(early) {
+    if (S.ended) return;
+    S.ended = true;
+    clearInterval(timerId);
+    el.input.disabled = true;
+    paintTime(0);
+    var dur = early ? Math.max(elapsed(), 1) : cfg.time;
+    var c = calc(dur);
+
+    var results = loadResults();
+    var prevBest = results.reduce(function (m, r) { return Math.max(m, r.wpm); }, 0);
+    var typedSomething = S.ok + S.bad > 0;
+    if (typedSomething) {
+      results.push({ wpm: c.wpm, acc: c.acc, time: Math.round(dur), mode: cfg.mode, date: Date.now() });
+      store("set", STORE_KEY, JSON.stringify(results.slice(-100)));
+    }
+
+    $("rWpm").textContent = c.wpm;
+    $("rAcc").textContent = c.acc + "%";
+    $("rOk").textContent = S.ok;
+    $("rBad").textContent = S.bad;
+    $("rWords").textContent = S.okWords + S.badWords;
+    $("rTime").textContent = Math.round(dur) + " detik";
+    $("rBadge").innerHTML = (typedSomething && c.wpm > prevBest && c.wpm > 0) ? '<span class="badge">Rekor baru!</span>' : "";
+
+    el.testView.hidden = true;
+    el.resultView.hidden = false;
+    $("againBtn").focus();
+    renderStats();
+  }
+
+  function restart() {
+    clearInterval(timerId);
+    resetState();
+    el.words.innerHTML = "";
+    el.words.scrollTo({ top: 0, behavior: "instant" });
+    appendWords(cfg.gen ? cfg.gen() : makeWords(250));
+    el.input.disabled = false;
+    el.input.value = "";
+    el.resultView.hidden = true;
+    el.testView.hidden = false;
+    paintTime(cfg.time);
+    el.sTime.parentNode.classList.remove("low");
+    paintLive();
+    markCurrent();
+    var mn = $("modeNote"); mn.textContent = cfg.note || ""; mn.hidden = !cfg.note; syncSeg();
+    if (isTyping()) el.input.focus();
+  }
+
+  /* ========== HALAMAN STATISTIK ========== */
+  function renderStats() {
+    var r = loadResults();
+    var best = 0, bestAcc = 0, sum = 0;
+    r.forEach(function (x) { best = Math.max(best, x.wpm); bestAcc = Math.max(bestAcc, x.acc); sum += x.wpm; });
+    $("tBest").textContent = best;
+    $("tAcc").textContent = bestAcc + "%";
+    $("tCount").textContent = r.length;
+    $("tAvg").textContent = r.length ? Math.round(sum / r.length) : 0;
+
+    var box = $("history");
+    if (!r.length) { box.innerHTML = '<p class="empty">Belum ada hasil. Selesaikan satu tes untuk melihat riwayatmu di sini.</p>'; return; }
+    var rows = r.slice(-10).reverse().map(function (x) {
+      var d = new Date(x.date);
+      var tgl = d.toLocaleDateString("id-ID", { day: "numeric", month: "short" }) + " " +
+                d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+      return "<tr><td>" + tgl + "</td><td>" + x.wpm + " WPM</td><td>" + x.acc + "%</td><td>" + x.time + " dtk</td><td>" + (x.mode === "lanjutan" ? "Lanjutan" : "Normal") + "</td></tr>";
+    }).join("");
+    box.innerHTML = "<table><thead><tr><th>Waktu</th><th>Kecepatan</th><th>Akurasi</th><th>Durasi</th><th>Mode</th></tr></thead><tbody>" + rows + "</tbody></table>";
+  }
+
+  var clearTimer = null;
+  $("clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (clearTimer) {
+      clearTimeout(clearTimer); clearTimer = null;
+      store("del", STORE_KEY);
+      b.textContent = "Hapus statistik";
+      renderStats();
+    } else {
+      b.textContent = "Yakin? Klik sekali lagi";
+      clearTimer = setTimeout(function () { clearTimer = null; b.textContent = "Hapus statistik"; }, 3000);
+    }
+  });
+
+  /* ========== NAVIGASI ========== */
+  var PAGES = ["typing","competition","practice","multiplayer","custom","hangout","blog","faq","feedback","translate","footprint","privacy","cookies","links","statistik","tentang"];
+  var side = $("side"), scrim = $("scrim");
+  function curPage() {
+    var n = (location.hash || "#typing").slice(1);
+    if (n === "tes") n = "typing";
+    return PAGES.indexOf(n) < 0 ? "typing" : n;
+  }
+  function isTyping() { return curPage() === "typing"; }
+  function openSide() {
+    side.classList.add("on"); scrim.classList.add("on");
+    $("menuBtn").setAttribute("aria-expanded", "true");
+    var c = $("closeBtn"); if (c) c.focus();
+  }
+  function closeSide() {
+    side.classList.remove("on"); scrim.classList.remove("on");
+    $("menuBtn").setAttribute("aria-expanded", "false");
+  }
+  function route() {
+    var n = curPage();
+    document.querySelectorAll(".page").forEach(function (p) { p.classList.toggle("show", p.id === "page-" + n); });
+    document.querySelectorAll(".menu a").forEach(function (a) { a.classList.toggle("active", a.dataset.page === n); });
+    document.querySelectorAll("#side a").forEach(function (a) { a.classList.toggle("active", a.dataset.h === n); });
+    (HOOKS[n] || function () {})();
+    closeSide();
+    window.scrollTo(0, 0);
+    if (n === "typing" && !S.ended) el.input.focus();
+  }
+  window.addEventListener("hashchange", route);
+  $("menuBtn").addEventListener("click", openSide);
+  scrim.addEventListener("click", closeSide);
+  side.addEventListener("click", function (e) { if (e.target.closest("a")) closeSide(); });
+
+  /* ========== OPSI ========== */
+  function bindSeg(groupId, attr, apply) {
+    $(groupId).addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-" + attr + "]");
+      if (!b) return;
+      $(groupId).querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      apply(b.dataset[attr]); cfg.gen = null; cfg.note = "";
+      restart();
+    });
+  }
+  bindSeg("timeGrp", "time", function (v) { cfg.time = parseInt(v, 10); });
+  bindSeg("modeGrp", "mode", function (v) { cfg.mode = v; });
+
+  /* ========== TEMA ========== */
+  var THEMES = [["light","Default (Light)","#f4f5fa","#3358e6"],["classic","Classic","#ece6d6","#8a5a2b"],["lemondrop","Lemondrop","#fffbd6","#f2b705"],["dark","Default (Dark)","#0e1320","#8aa0ff"],["glow","Glow","#0a0618","#25e8ff"],["valentine","Valentine","#fff0f3","#e11d5a"]];
+  var panel = $("themePanel");
+  THEMES.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button"; b.dataset.t = t[0];
+    b.innerHTML = '<i style="background:linear-gradient(135deg,' + t[2] + ' 50%,' + t[3] + ' 50%)"></i>' + t[1];
+    panel.appendChild(b);
+  });
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    panel.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.t === t)); });
+  }
+  var saved = store("get", THEME_KEY);
+  if (!THEMES.some(function (t) { return t[0] === saved; })) {
+    saved = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  applyTheme(saved);
+  $("themeBtn").addEventListener("click", function (e) { e.stopPropagation(); panel.hidden = !panel.hidden; });
+  panel.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-t]");
+    if (!b) return;
+    applyTheme(b.dataset.t); store("set", THEME_KEY, b.dataset.t); panel.hidden = true;
+  });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".themewrap")) panel.hidden = true; });
+
+  /* ========== EVENT LAIN ========== */
+  el.input.addEventListener("input", onInput);
+  el.input.addEventListener("paste", function (e) { e.preventDefault(); });
+  el.words.addEventListener("click", function () { if (!S.ended) el.input.focus(); });
+  $("restartBtn").addEventListener("click", restart);
+  $("againBtn").addEventListener("click", restart);
+  $("toStatBtn").addEventListener("click", function () { location.hash = "#statistik"; });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    $("themePanel").hidden = true;
+    if (side.classList.contains("on")) closeSide();
+    else if (isTyping()) { e.preventDefault(); restart(); }
+  });
+
+  /* ========== MENU & HALAMAN BARU ========== */
+  var NAME_KEY = "typeindonesia_name", CHK = "typeindonesia_chat", FBK = "typeindonesia_feedback", MPK = "typeindonesia_mp", LANG_KEY = "typeindonesia_lang", CK_KEY = "typeindonesia_consent";
+  var EN = ("the be to of and have it for not with you this but from they say her she will one all would there their what so out about who get which when make can like time just know take people into year good some could them see other than then now look only come over think also back after use two how work first well way even new want because any give day most another because against without together children something government question important through between").split(" ");
+  var NAV = [["PERMAINAN","GAMES",[["typing","Tes Mengetik","Typing Test"],["competition","Kompetisi","Competition"],["practice","Teks Latihan","Practice Texts"],["multiplayer","Multiplayer","Multiplayer"],["custom","Mode Kustom","Custom Mode"],["hangout","Hangout","Hangout"],["statistik","Statistik","Statistics"],["tentang","Tentang","About"]]],
+    ["BANTUAN","HELP",[["blog","Blog","Blog"],["faq","FAQ","FAQ"],["feedback","Masukan","Feedback"],["translate","Terjemahkan","Translate"]]],
+    ["LEGAL","LEGAL",[["footprint","Jejak","Footprint"],["privacy","Privasi","Privacy"],["cookies","Kebijakan Cookie","Cookie Policy"]]],
+    ["LINKS","LINKS",[["links","Build, Launch and Grow","Build, Launch and Grow"],["links","Brain Training Games","Brain Training Games"],["links","Mobile Typing App","Mobile Typing App"],["links","Online Text Tools","Online Text Tools"]]]];
+  var HOOKS = { competition: renderComp, practice: pickText, multiplayer: mpRec, hangout: renderChat, footprint: renderFoot, cookies: showCk, statistik: renderStats };
+
+  function jget(k, d) { try { var v = JSON.parse(store("get", k)); return v == null ? d : v; } catch (e) { return d; } }
+  function getName() { return (store("get", NAME_KEY) || "Kamu").slice(0, 16); }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function syncSeg() {
+    document.querySelectorAll("#timeGrp button").forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.time === cfg.time)); });
+    document.querySelectorAll("#modeGrp button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.mode === cfg.mode)); });
+  }
+  function go() { location.hash = "#typing"; restart(); }
+  function pickWords(n, l, d) {
+    var p = l === "en" ? EN : WORD_LIST;
+    var f = p.filter(function (w) { return d === "mudah" ? w.length <= 5 : d === "sulit" ? w.length >= 7 : true; });
+    if (f.length < 10) f = p;
+    var a = [];
+    while (a.length < n) a = a.concat(shuffle(f));
+    a = a.slice(0, n);
+    if (d === "sulit") a = a.map(function (w) {
+      if (Math.random() < 0.3) w = w.charAt(0).toUpperCase() + w.slice(1);
+      var r = Math.random(); return r < 0.12 ? w + "," : r < 0.2 ? w + "." : w;
+    });
+    return a;
+  }
+  function buildSide() {
+    var h = '<div class="sh"><b>TYPE INDONESIA</b><button class="ibtn" id="closeBtn" type="button" aria-label="Tutup menu">✕</button></div>';
+    NAV.forEach(function (g) {
+      h += '<div class="sg" data-en="' + g[1] + '">' + g[0] + "</div>";
+      g[2].forEach(function (i) { h += '<a href="#' + i[0] + '" data-h="' + i[0] + '" data-en="' + i[2] + '">' + i[1] + "</a>"; });
+    });
+    side.innerHTML = h;
+    $("closeBtn").addEventListener("click", closeSide);
+  }
+
+  /* Kompetisi */
+  var DUMMY = [["Rani_88",96,99],["BudiKetik",88,97],["Sari.Dev",81,98],["Dimas_P",74,95],["Lia",66,96],["Agus77",58,92],["Nadia",49,94],["Tono",41,90]];
+  function renderComp() {
+    var r = loadResults(), w = 0, a = 0, nm = getName();
+    r.forEach(function (x) { w = Math.max(w, x.wpm); a = Math.max(a, x.acc); });
+    var rows = DUMMY.map(function (d) { return [d[0], d[1], d[2], 0]; });
+    if (r.length) rows.push([nm, w, a, 1]);
+    rows.sort(function (x, y) { return y[1] - x[1]; });
+    $("cName").value = nm;
+    $("compTbl").innerHTML = "<table><thead><tr><th>Posisi</th><th>Pengguna</th><th>WPM</th><th>Akurasi</th></tr></thead><tbody>" +
+      rows.map(function (x, i) { return "<tr" + (x[3] ? ' style="font-weight:700;color:var(--acc)"' : "") + "><td>" + (i + 1) + "</td><td>" + esc(x[0]) + "</td><td>" + x[1] + "</td><td>" + x[2] + "%</td></tr>"; }).join("") + "</tbody></table>" +
+      (r.length ? "" : '<p class="empty">Selesaikan satu tes agar namamu masuk peringkat.</p>');
+  }
+  $("cName").addEventListener("change", function () { store("set", NAME_KEY, this.value.trim() || "Kamu"); renderComp(); });
+
+  /* Teks latihan */
+  var TEXTS = {
+    pemula: ["saya suka makan nasi goreng di rumah","ibu pergi ke pasar untuk membeli sayur dan buah","kami bermain bola di taman setiap sore"],
+    menengah: ["Belajar mengetik dengan sepuluh jari membuat pekerjaan menjadi lebih cepat, rapi, dan menyenangkan.","Setiap pagi, ayah membaca berita sambil menikmati secangkir kopi hangat di teras rumah.","Latihan yang teratur lebih berguna daripada belajar lama hanya dalam satu hari."],
+    sulit: ["Perekonomian Indonesia bertumbuh pesat; pemerintah, pengusaha, dan masyarakat berkolaborasi menghadapi tantangan global.","Pembangunan infrastruktur seperti jalan, jembatan, dan bandara mempercepat distribusi barang ke seluruh nusantara.","Teknologi informasi mengubah cara kita berkomunikasi, bekerja, belajar, dan berbelanja setiap hari."]
+  };
+  var pCat = "pemula", pTxt = "";
+  function pickText() { var a = TEXTS[pCat]; pTxt = a[Math.floor(Math.random() * a.length)]; $("pvText").textContent = pTxt; }
+  $("pCat").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    pCat = b.dataset.c;
+    $("pCat").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    pickText();
+  });
+  $("pNext").addEventListener("click", pickText);
+  $("pStart").addEventListener("click", function () {
+    var w = pTxt.split(" ");
+    cfg.gen = function () { return w.slice(); }; cfg.time = 120;
+    cfg.note = "Latihan " + pCat + ": ketik seluruh teks. Pilih waktu atau mode di atas untuk kembali ke tes biasa.";
+    go();
+  });
+
+  /* Mode kustom */
+  $("cuGo").addEventListener("click", function () {
+    var t = +$("cuT").value, n = +$("cuN").value, l = $("cuL").value, d = $("cuD").value;
+    cfg.time = t; cfg.gen = function () { return pickWords(n, l, d); };
+    cfg.note = "Mode kustom: " + t + " detik, " + n + " kata, " + (l === "en" ? "English" : "Indonesia") + ", " + d + ". Pilih waktu atau mode di atas untuk kembali ke tes biasa.";
+    go();
+  });
+
+  /* Multiplayer (demo dengan bot) */
+  var mp = { t: null, w: [], i: 0, b: 0, v: 0, on: false };
+  function mpRec() { var s = jget(MPK, { w: 0, l: 0 }); $("mpRec").textContent = s.w + " menang · " + s.l + " kalah"; return s; }
+  function mpDraw() {
+    var n = mp.w.length || 1;
+    $("mpText").innerHTML = mp.w.map(function (w, i) { return i === mp.i ? "<mark>" + w + "</mark>" : w; }).join(" ");
+    $("mpMe").style.width = mp.i / n * 100 + "%";
+    $("mpBot").style.width = Math.min(mp.b, n) / n * 100 + "%";
+    $("mpMeT").textContent = "Kamu: " + mp.i + "/" + mp.w.length + " kata";
+  }
+  function mpEnd(win) {
+    clearInterval(mp.t); mp.on = false; $("mpIn").disabled = true;
+    var s = mpRec(); if (win) s.w++; else s.l++;
+    store("set", MPK, JSON.stringify(s)); mpRec();
+    $("mpStatus").textContent = win ? "Kamu menang! 🎉" : "Lawan menang. Coba lagi!";
+    $("mpFind").disabled = false;
+  }
+  $("mpFind").addEventListener("click", function () {
+    this.disabled = true;
+    mp.w = pickWords(15, "id", "sedang"); mp.i = 0; mp.b = 0; mpDraw(); $("mpIn").value = "";
+    $("mpStatus").textContent = "Mencari lawan…";
+    setTimeout(function () {
+      var nm = ["Bot_Rina", "Bot_Joko", "Bot_Maya"][Math.floor(Math.random() * 3)];
+      mp.v = 30 + Math.floor(Math.random() * 35);
+      $("mpOpp").textContent = nm + " (±" + mp.v + " WPM)";
+      var n = 3; $("mpStatus").textContent = "Lawan ditemukan! Mulai dalam 3…";
+      var c = setInterval(function () {
+        n--;
+        if (n > 0) { $("mpStatus").textContent = "Mulai dalam " + n + "…"; return; }
+        clearInterval(c); mp.on = true;
+        $("mpStatus").textContent = "Ketik sekarang! Kata harus benar untuk lanjut.";
+        $("mpIn").disabled = false; $("mpIn").focus();
+        mp.t = setInterval(function () { mp.b += mp.v / 600; mpDraw(); if (mp.b >= mp.w.length) mpEnd(false); }, 100);
+      }, 1000);
+    }, 1500);
+  });
+  $("mpIn").addEventListener("input", function () {
+    if (!mp.on || this.value.indexOf(" ") < 0) return;
+    var t = this.value.trim(); this.value = "";
+    if (t === mp.w[mp.i]) { mp.i++; mpDraw(); if (mp.i >= mp.w.length) mpEnd(true); }
+  });
+
+  /* Hangout */
+  var BOTR = ["Mantap, lanjutkan latihannya!", "Aku juga lagi latihan nih.", "Semangat ya, konsisten itu kuncinya."];
+  function chatLoad() {
+    var a = jget(CHK, []);
+    return a.length ? a : [["Admin", "Selamat datang di Hangout! Sapa sesama pengetik di sini."], ["Rina", "Baru dapat 72 WPM hari ini 🎉"]];
+  }
+  function renderChat() {
+    var box = $("chat"); box.innerHTML = "";
+    chatLoad().forEach(function (m) {
+      var d = document.createElement("div"), b = document.createElement("b");
+      d.className = "msg" + (m[0] === getName() ? " me" : "");
+      b.textContent = m[0] + ": "; d.appendChild(b); d.appendChild(document.createTextNode(m[1]));
+      box.appendChild(d);
+    });
+    box.scrollTop = box.scrollHeight;
+  }
+  function addChat(who, t) { var a = chatLoad(); a.push([who, t]); store("set", CHK, JSON.stringify(a.slice(-50))); renderChat(); }
+  function sendChat() {
+    var t = $("chIn").value.trim(); if (!t) return;
+    $("chIn").value = ""; addChat(getName(), t);
+    setTimeout(function () { addChat("Rina", BOTR[Math.floor(Math.random() * BOTR.length)]); }, 1200);
+  }
+  $("chSend").addEventListener("click", sendChat);
+  $("chIn").addEventListener("keydown", function (e) { if (e.key === "Enter") sendChat(); });
+
+  /* FAQ (satu terbuka) */
+  document.querySelectorAll("#page-faq details").forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (d.open) document.querySelectorAll("#page-faq details").forEach(function (o) { if (o !== d) o.open = false; });
+    });
+  });
+
+  /* Masukan */
+  $("fbSend").addEventListener("click", function () {
+    var n = $("fbN").value.trim(), e = $("fbE").value.trim(), m = $("fbM").value.trim(), o = $("fbOut");
+    if (!n || e.indexOf("@") < 1 || !m) { o.textContent = "Isi nama, email yang valid, dan pesan."; return; }
+    var a = jget(FBK, []); a.push({ n: n, e: e, m: m, d: Date.now() });
+    store("set", FBK, JSON.stringify(a));
+    $("fbN").value = ""; $("fbE").value = ""; $("fbM").value = "";
+    o.textContent = "Masukan berhasil dikirim";
+  });
+
+  /* Bahasa antarmuka */
+  function applyLang(l) {
+    document.documentElement.lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (e) {
+      if (e.dataset.id === undefined) e.dataset.id = e.textContent;
+      e.textContent = l === "en" ? e.dataset.en : e.dataset.id;
+    });
+    $("lgGrp").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.l === l)); });
+    store("set", LANG_KEY, l);
+  }
+  $("lgGrp").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) applyLang(b.dataset.l); });
+
+  /* Jejak */
+  var FOOT_KEYS = [STORE_KEY, NAME_KEY, CHK, FBK, MPK, THEME_KEY, LANG_KEY, CK_KEY];
+  function renderFoot() {
+    var r = loadResults(), f = function (x) { return new Date(x.date).toLocaleDateString("id-ID"); };
+    $("footBox").innerHTML = "<p>Total tes tersimpan: <b>" + r.length + "</b>" + (r.length ? ". Pertama: " + f(r[0]) + ", terakhir: " + f(r[r.length - 1]) : "") + ".</p><table><thead><tr><th>Kunci localStorage</th><th>Isi</th></tr></thead><tbody>" +
+      FOOT_KEYS.map(function (k) { var v = store("get", k); return "<tr><td><code>" + k + "</code></td><td>" + (v === null ? "kosong" : v.length + " karakter") + "</td></tr>"; }).join("") + "</tbody></table>";
+  }
+  var footT = null;
+  $("footClear").addEventListener("click", function () {
+    var b = this;
+    if (footT) {
+      clearTimeout(footT); footT = null; b.textContent = "Hapus semua data lokal";
+      FOOT_KEYS.forEach(function (k) { store("del", k); });
+      renderFoot(); renderStats(); showCk();
+    } else {
+      b.textContent = "Yakin? Klik sekali lagi";
+      footT = setTimeout(function () { footT = null; b.textContent = "Hapus semua data lokal"; }, 3000);
+    }
+  });
+
+  /* Persetujuan localStorage */
+  function showCk() {
+    var ok = store("get", CK_KEY);
+    $("ck").hidden = !!ok;
+    $("ckSt").textContent = ok ? "Kamu sudah menyetujui penyimpanan lokal." : "Belum ada persetujuan.";
+  }
+  $("ckOk").addEventListener("click", function () { store("set", CK_KEY, "1"); showCk(); });
+  $("ckReset").addEventListener("click", function () { store("del", CK_KEY); showCk(); });
+
+  function initUI() {
+    buildSide();
+    applyLang(store("get", LANG_KEY) === "en" ? "en" : "id");
+    showCk();
+  }
+
+  /* ========== MULAI ========== */
+  initUI();
+  resetState();
+  restart();
+  route();
+  renderStats();
+})();
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzaTYDbCLllLWQo5suCI7Fjn5mRbXrJ64",
+  authDomain: "josei-4ac31.firebaseapp.com",
+  projectId: "josei-4ac31",
+  storageBucket: "josei-4ac31.firebasestorage.app",
+  messagingSenderId: "1050753951384",
+  appId: "1:1050753951384:web:f581cde116ab5ae438d2ed",
+  measurementId: "G-9L727Q2MBM"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+window.__fb = true;
+
+const $ = (id) => document.getElementById(id);
+const modal = $("loginModal");
+let toastTimer;
+
+function toast(text, bad) {
+  const t = $("toast");
+  t.textContent = text;
+  t.className = "toast on" + (bad ? " bad" : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 3200);
+}
+
+function errorText(code) {
+  switch (code) {
+    case "auth/invalid-credential":
+    case "auth/user-not-found":
+    case "auth/wrong-password": return "Email atau password salah";
+    case "auth/invalid-email": return "Format email tidak valid";
+    case "auth/too-many-requests": return "Terlalu banyak percobaan. Coba lagi nanti";
+    case "auth/network-request-failed": return "Koneksi internet bermasalah";
+    case "auth/user-disabled": return "Akun ini dinonaktifkan";
+    default: return "Login gagal. Coba lagi";
+  }
+}
+
+function openModal() {
+  $("lgMsg").textContent = "";
+  modal.hidden = false;
+  $("lgEmail").focus();
+}
+function closeModal() {
+  modal.hidden = true;
+  $("lgPass").value = "";
+  $("lgPass").type = "password";
+  $("lgEye").textContent = "👁";
+}
+
+async function loginEmail() {
+  const email = $("lgEmail").value.trim();
+  const pass = $("lgPass").value;
+  const msg = $("lgMsg");
+  msg.textContent = "";
+  if (!email || !pass) { msg.textContent = "Isi email dan password"; return; }
+  const btn = $("lgSubmit");
+  btn.disabled = true; btn.textContent = "Memproses…";
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    closeModal();
+    toast("Login berhasil");
+  } catch (e) {
+    msg.textContent = errorText(e.code);
+  } finally {
+    btn.disabled = false; btn.textContent = "Login";
+  }
+}
+
+async function loginGoogle() {
+  $("lgMsg").textContent = "";
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (e) {
+    $("lgMsg").textContent = "Login dengan Google gagal";
+    toast("Login dengan Google gagal", true);
+  }
+}
+
+async function logout() {
+  $("profMenu").hidden = true;
+  try {
+    await signOut(auth);
+    toast("Anda berhasil logout");
+  } catch (e) {
+    toast("Logout gagal. Coba lagi", true);
+  }
+}
+
+$("loginBtn").addEventListener("click", openModal);
+$("lgClose").addEventListener("click", closeModal);
+modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+$("lgSubmit").addEventListener("click", loginEmail);
+$("lgGoogle").addEventListener("click", loginGoogle);
+$("logoutBtn").addEventListener("click", logout);
+["lgEmail", "lgPass"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") loginEmail(); }));
+$("lgEye").addEventListener("click", () => {
+  const show = $("lgPass").type === "password";
+  $("lgPass").type = show ? "text" : "password";
+  $("lgEye").textContent = show ? "🙈" : "👁";
+  $("lgEye").setAttribute("aria-label", show ? "Sembunyikan password" : "Tampilkan password");
+});
+$("profBtn").addEventListener("click", (e) => { e.stopPropagation(); $("profMenu").hidden = !$("profMenu").hidden; });
+document.addEventListener("click", (e) => { if (!e.target.closest("#profile")) $("profMenu").hidden = true; });
+// Esc menutup modal tanpa ikut mengulang typing test
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (!modal.hidden) { e.stopImmediatePropagation(); closeModal(); }
+  else $("profMenu").hidden = true;
+}, true);
+
+// Hasil redirect Google
+getRedirectResult(auth)
+  .then((result) => { if (result && result.user) toast("Login berhasil"); })
+  .catch(() => toast("Login dengan Google gagal", true));
+
+// Status login (tetap terbaca setelah refresh)
+onAuthStateChanged(auth, (user) => {
+  $("loginBtn").hidden = !!user;
+  $("profile").hidden = !user;
+  if (!user) { $("profMenu").hidden = true; return; }
+  const name = user.displayName || (user.email ? user.email.split("@")[0] : "Pengguna");
+  const img = $("profImg"), ini = $("profIni");
+  $("profName").textContent = name;
+  $("profMail").textContent = user.email || "";
+  ini.textContent = name.charAt(0).toUpperCase();
+  if (user.photoURL) {
+    img.onerror = () => { img.hidden = true; ini.hidden = false; };
+    img.src = user.photoURL;
+    img.hidden = false; ini.hidden = true;
+  } else {
+    img.hidden = true; ini.hidden = false;
+  }
+  closeModal();
+});
+</script>
+</body>
+</html>
