@@ -187,11 +187,12 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
     <a href="#statistik" data-page="statistik" data-en="Statistics">Statistik</a>
     <a href="#tentang" data-page="tentang" data-en="About">Tentang</a>
     <div class="themewrap"><button class="theme" id="themeBtn" type="button" aria-haspopup="true">🎨 Tema</button><div class="panel" id="themePanel" hidden></div></div>
-    <button class="btn sm" id="loginBtn" type="button">Login</button>
+    <button class="btn sm" id="loginBtn" type="button" hidden>Login</button>
     <div class="profwrap" id="profile" hidden>
-      <button class="theme pbtn" id="profBtn" type="button" aria-haspopup="true"><img class="av" id="profImg" alt="" referrerpolicy="no-referrer" hidden><span class="av" id="profIni"></span><span id="profName"></span></button>
-      <div class="panel" id="profMenu" hidden><p class="pm" id="profMail"></p><button type="button" id="logoutBtn">Logout</button></div>
+      <button class="theme pbtn" id="profBtn" type="button" aria-haspopup="true"><img class="av" id="profImg" alt="" referrerpolicy="no-referrer" hidden><span class="av" id="profIni" hidden></span><span id="profName"></span></button>
+      <div class="panel" id="profMenu" hidden><p class="pm" id="profMenuName" style="font-weight:700;color:var(--ink);margin-bottom:0"></p><p class="pm" id="profMail"></p></div>
     </div>
+    <button class="btn ghost sm" id="logoutBtn" type="button" hidden>Logout</button>
   </nav>
 </header>
 <aside id="side" aria-label="Menu navigasi"></aside>
@@ -374,6 +375,7 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
   </div>
 </div>
 <script>
+setTimeout(function(){if(!window.__authReady)document.getElementById("loginBtn").hidden=false;},4000);
 document.getElementById("loginBtn").addEventListener("click",function(){if(window.__fb)return;var t=document.getElementById("toast");t.textContent="Layanan login belum termuat. Periksa internet lalu muat ulang halaman.";t.className="toast bad on";setTimeout(function(){t.classList.remove("on")},3500);});
 </script>
 <script>
@@ -976,9 +978,12 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithRedirect,
+  signInWithPopup,
   getRedirectResult,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -992,10 +997,19 @@ const firebaseConfig = {
   measurementId: "G-9L727Q2MBM"
 };
 
+// Satu-satunya instance Firebase & auth di seluruh halaman
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
 window.__fb = true;
+
+// Sesi disimpan permanen di browser (bertahan saat refresh/pindah halaman)
+const persistenceReady = setPersistence(auth, browserLocalPersistence)
+  .catch((e) => console.warn("Persistence lokal gagal:", e.code));
+
+// Status login untuk bagian lain website: window.TI_AUTH.user dan event "authchange"
+window.TI_AUTH = { get user() { return auth.currentUser; }, ready: false };
 
 const $ = (id) => document.getElementById(id);
 const modal = $("loginModal");
@@ -1018,6 +1032,9 @@ function errorText(code) {
     case "auth/too-many-requests": return "Terlalu banyak percobaan. Coba lagi nanti";
     case "auth/network-request-failed": return "Koneksi internet bermasalah";
     case "auth/user-disabled": return "Akun ini dinonaktifkan";
+    case "auth/unauthorized-domain": return "Domain website ini belum diizinkan di Firebase (Authorized domains)";
+    case "auth/operation-not-allowed": return "Metode login ini belum diaktifkan di Firebase";
+    case "auth/popup-closed-by-user": return "Login dibatalkan";
     default: return "Login gagal. Coba lagi";
   }
 }
@@ -1043,10 +1060,12 @@ async function loginEmail() {
   const btn = $("lgSubmit");
   btn.disabled = true; btn.textContent = "Memproses…";
   try {
+    await persistenceReady;
     await signInWithEmailAndPassword(auth, email, pass);
     closeModal();
     toast("Login berhasil");
   } catch (e) {
+    console.error("loginEmail:", e.code, e);
     msg.textContent = errorText(e.code);
   } finally {
     btn.disabled = false; btn.textContent = "Login";
@@ -1054,21 +1073,40 @@ async function loginEmail() {
 }
 
 async function loginGoogle() {
-  $("lgMsg").textContent = "";
+  const msg = $("lgMsg");
+  msg.textContent = "";
+  if (location.protocol === "file:") {
+    msg.textContent = "Login Google tidak bisa dari file://. Buka lewat http://localhost atau hosting.";
+    return;
+  }
+  const btn = $("lgGoogle");
+  btn.disabled = true;
   try {
-    await signInWithRedirect(auth, provider);
+    await persistenceReady;
+    // Popup dipakai karena redirect lintas-domain (authDomain firebaseapp.com) sering
+    // kehilangan sesi di browser modern, sehingga user dianggap belum login.
+    await signInWithPopup(auth, provider);
+    closeModal();
+    toast("Login berhasil");
   } catch (e) {
-    $("lgMsg").textContent = "Login dengan Google gagal";
+    console.error("loginGoogle:", e.code, e);
+    if (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment") {
+      try { await signInWithRedirect(auth, provider); return; } catch (e2) { console.error(e2.code); }
+    }
+    msg.textContent = e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request"
+      ? errorText("auth/popup-closed-by-user") : "Login dengan Google gagal. " + errorText(e.code);
     toast("Login dengan Google gagal", true);
+  } finally {
+    btn.disabled = false;
   }
 }
 
 async function logout() {
-  $("profMenu").hidden = true;
   try {
-    await signOut(auth);
+    await signOut(auth);          // UI diperbarui oleh onAuthStateChanged
     toast("Anda berhasil logout");
   } catch (e) {
+    console.error("logout:", e.code, e);
     toast("Logout gagal. Coba lagi", true);
   }
 }
@@ -1088,37 +1126,55 @@ $("lgEye").addEventListener("click", () => {
 });
 $("profBtn").addEventListener("click", (e) => { e.stopPropagation(); $("profMenu").hidden = !$("profMenu").hidden; });
 document.addEventListener("click", (e) => { if (!e.target.closest("#profile")) $("profMenu").hidden = true; });
-// Esc menutup modal tanpa ikut mengulang typing test
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!modal.hidden) { e.stopImmediatePropagation(); closeModal(); }
   else $("profMenu").hidden = true;
 }, true);
 
-// Hasil redirect Google
-getRedirectResult(auth)
-  .then((result) => { if (result && result.user) toast("Login berhasil"); })
-  .catch(() => toast("Login dengan Google gagal", true));
-
-// Status login (tetap terbaca setelah refresh)
-onAuthStateChanged(auth, (user) => {
+// Satu fungsi render untuk SEMUA status login (login, logout, refresh, pindah halaman)
+function renderAuth(user) {
+  window.TI_AUTH.ready = true;
+  window.__authReady = true;
+  document.documentElement.dataset.auth = user ? "in" : "out";
   $("loginBtn").hidden = !!user;
   $("profile").hidden = !user;
-  if (!user) { $("profMenu").hidden = true; return; }
-  const name = user.displayName || (user.email ? user.email.split("@")[0] : "Pengguna");
+  $("logoutBtn").hidden = !user;
   const img = $("profImg"), ini = $("profIni");
-  $("profName").textContent = name;
-  $("profMail").textContent = user.email || "";
-  ini.textContent = name.charAt(0).toUpperCase();
-  if (user.photoURL) {
-    img.onerror = () => { img.hidden = true; ini.hidden = false; };
-    img.src = user.photoURL;
-    img.hidden = false; ini.hidden = true;
+  if (!user) {
+    $("profMenu").hidden = true;
+    $("profName").textContent = "";
+    $("profMenuName").textContent = "";
+    $("profMail").textContent = "";
+    img.removeAttribute("src"); img.hidden = true; ini.hidden = true;
   } else {
-    img.hidden = true; ini.hidden = false;
+    // Data dari currentUser; jika kosong, cadangan dari data provider (mis. Google)
+    const pd = user.providerData.find((p) => p && (p.photoURL || p.displayName)) || {};
+    const email = user.email || pd.email || "";
+    const name = user.displayName || pd.displayName || (email ? email.split("@")[0] : "Pengguna");
+    const photo = user.photoURL || pd.photoURL || "";
+    $("profName").textContent = name;
+    $("profMenuName").textContent = name;
+    $("profMail").textContent = email;
+    ini.textContent = name.charAt(0).toUpperCase();
+    if (photo) {
+      img.onerror = () => { img.hidden = true; ini.hidden = false; };
+      img.src = photo; img.hidden = false; ini.hidden = true;
+    } else {
+      img.hidden = true; ini.hidden = false;
+    }
+    closeModal();
   }
-  closeModal();
-});
+  window.dispatchEvent(new CustomEvent("authchange", { detail: { user } }));
+}
+
+// Listener realtime: dipasang sekali; callback pertama = Firebase selesai membaca sesi
+onAuthStateChanged(auth, renderAuth, (err) => { console.error("onAuthStateChanged:", err); renderAuth(null); });
+
+// Hanya untuk fallback redirect
+getRedirectResult(auth)
+  .then((r) => { if (r && r.user) toast("Login berhasil"); })
+  .catch((e) => { console.error("getRedirectResult:", e.code, e); toast("Login dengan Google gagal. " + errorText(e.code), true); });
 </script>
 </body>
 </html>
