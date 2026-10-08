@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TYPE INDONESIA – Tes Kecepatan Mengetik</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 :root{
   --bg:#f4f5fa;--card:#fff;--ink:#16213a;--mut:#667089;--line:#e0e4ef;
@@ -173,6 +174,18 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
 .toast.bad{background:var(--bad)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:480px){#profName{display:none}}
+
+.foot{max-width:960px;margin:0 auto;padding:0 20px 28px}
+.foot-in{display:flex;align-items:center;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.foot p{margin:0;color:var(--mut);font-size:.88rem}
+.social{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.social .fl2{color:var(--mut);font-size:.88rem;margin-right:2px}
+.sbtn{--c:var(--acc);display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem;transition:transform .2s,border-color .2s,box-shadow .2s}
+.sbtn i{font-size:1.15rem;color:var(--mut);transition:color .2s,transform .2s}
+.sbtn.wa{--c:#25d366}.sbtn.ig{--c:#e1306c}
+.sbtn:hover,.sbtn:focus-visible{transform:translateY(-2px);border-color:var(--c);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.sbtn:hover i,.sbtn:focus-visible i{color:var(--c);transform:scale(1.12)}
+@media (max-width:640px){.foot{padding:0 14px 24px}.foot-in{flex-direction:column;align-items:stretch;text-align:center}.social{justify-content:center}.social .fl2{width:100%}.sbtn{flex:1;justify-content:center}}
 </style>
 </head>
 <body>
@@ -356,6 +369,12 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
     <div class="card"><h3>Mobile Typing App</h3><p>Aplikasi latihan mengetik untuk HP.</p><span class="tag">Placeholder: belum ada URL</span></div>
     <div class="card"><h3>Online Text Tools</h3><p>Alat bantu teks: hitung kata, ubah huruf, dan lainnya.</p><span class="tag">Placeholder: belum ada URL</span></div></div></section>
 </main>
+<footer class="foot"><div class="foot-in">
+  <p>TYPE INDONESIA · Latih ketikanmu setiap hari</p>
+  <div class="social"><span class="fl2" data-en="Contact us">Hubungi kami</span>
+    <a class="sbtn wa" href="https://wa.me/6285891508250" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp 085891508250"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a>
+    <a class="sbtn ig" href="https://www.instagram.com/ridwan_dkc/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @ridwan_dkc"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span>@ridwan_dkc</span></a>
+  </div></div></footer>
 <div id="ck" hidden><p>Website ini menyimpan preferensi dan hasil tes di localStorage browsermu.</p><button class="btn" id="ckOk" type="button">Mengerti</button></div>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
