@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TYPE INDONESIA – Tes Kecepatan Mengetik</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 :root{
   --bg:#f4f5fa;--card:#fff;--ink:#16213a;--mut:#667089;--line:#e0e4ef;
@@ -175,17 +174,23 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:480px){#profName{display:none}}
 
-.foot{max-width:960px;margin:0 auto;padding:0 20px 28px}
-.foot-in{display:flex;align-items:center;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
-.foot p{margin:0;color:var(--mut);font-size:.88rem}
-.social{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.social .fl2{color:var(--mut);font-size:.88rem;margin-right:2px}
-.sbtn{--c:var(--acc);display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem;transition:transform .2s,border-color .2s,box-shadow .2s}
-.sbtn i{font-size:1.15rem;color:var(--mut);transition:color .2s,transform .2s}
-.sbtn.wa{--c:#25d366}.sbtn.ig{--c:#e1306c}
-.sbtn:hover,.sbtn:focus-visible{transform:translateY(-2px);border-color:var(--c);box-shadow:0 6px 16px rgba(0,0,0,.12)}
-.sbtn:hover i,.sbtn:focus-visible i{color:var(--c);transform:scale(1.12)}
-@media (max-width:640px){.foot{padding:0 14px 24px}.foot-in{flex-direction:column;align-items:stretch;text-align:center}.social{justify-content:center}.social .fl2{width:100%}.sbtn{flex:1;justify-content:center}}
+/* Ojol Rush */
+.ojstage{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+#ojCv{display:block;width:100%;height:300px;background:var(--bg)}
+.ojov{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;background:var(--card);background:color-mix(in srgb,var(--card) 90%,transparent);z-index:2;overflow-y:auto}
+.ojov h2{margin:0 0 6px;font-size:clamp(1.6rem,5vw,2.4rem);letter-spacing:.06em;color:var(--acc)}
+.ojov p{color:var(--mut);max-width:420px;margin:0 auto 16px}
+.ojov .rgrid{margin-bottom:14px}
+.ojov .big{font-size:clamp(2.6rem,10vw,4rem)}
+.ojword{font-size:clamp(1.8rem,6vw,2.8rem);font-weight:800;letter-spacing:.08em;color:var(--mut);text-align:center;margin:14px 0 2px;min-height:1.3em}
+.ojword .k{color:var(--acc)}
+.ojword.err{color:var(--bad);animation:ojshake .25s}
+@keyframes ojshake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.ojnext{text-align:center;color:var(--mut);min-height:1.5em;letter-spacing:.06em;margin-bottom:12px}
+.ojin{width:100%;font:inherit;font-size:1.4rem;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+.ojin:focus{outline:none;border-color:var(--acc)}
+.ojin:disabled{opacity:.5}
+@media (max-width:640px){#ojCv{height:230px}.ojin{font-size:1.2rem}}
 </style>
 </head>
 <body>
@@ -197,6 +202,7 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
   </div>
   <nav class="menu" aria-label="Menu utama">
     <a href="#typing" data-page="typing" data-en="Typing Test">Tes Mengetik</a>
+    <a href="#ojol" data-page="ojol" data-en="Ojol Rush">Ojol Rush</a>
     <a href="#statistik" data-page="statistik" data-en="Statistics">Statistik</a>
     <a href="#tentang" data-page="tentang" data-en="About">Tentang</a>
     <div class="themewrap"><button class="theme" id="themeBtn" type="button" aria-haspopup="true">🎨 Tema</button><div class="panel" id="themePanel" hidden></div></div>
@@ -368,13 +374,54 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
     <div class="card"><h3>Brain Training Games</h3><p>Game untuk melatih fokus dan refleks.</p><span class="tag">Placeholder: belum ada URL</span></div>
     <div class="card"><h3>Mobile Typing App</h3><p>Aplikasi latihan mengetik untuk HP.</p><span class="tag">Placeholder: belum ada URL</span></div>
     <div class="card"><h3>Online Text Tools</h3><p>Alat bantu teks: hitung kata, ubah huruf, dan lainnya.</p><span class="tag">Placeholder: belum ada URL</span></div></div></section>
+
+  <!-- HALAMAN OJOL RUSH -->
+  <section class="page" id="page-ojol">
+    <h1 data-en="Ojol Rush">Ojol Rush</h1>
+    <p class="sub">Ketik kata buat ngegas dan antar orderan secepat mungkin. Salah ketik = kena lubang!</p>
+    <div class="opts"><div class="grp"><b>Waktu</b><div class="seg" id="ojDur">
+      <button type="button" data-v="30" aria-pressed="false">30 detik</button>
+      <button type="button" data-v="60" aria-pressed="true">60 detik</button>
+      <button type="button" data-v="120" aria-pressed="false">120 detik</button></div></div></div>
+    <div class="live">
+      <div class="stat timer" id="ojTBox"><span>Waktu</span><strong id="ojT">60</strong></div>
+      <div class="stat"><span>Km/jam</span><strong id="ojSpd">0</strong></div>
+      <div class="stat"><span>Jarak (m)</span><strong id="ojDist">0</strong></div>
+      <div class="stat"><span>Orderan</span><strong id="ojOrd">0</strong></div>
+      <div class="stat"><span>Combo</span><strong id="ojCmb">0</strong></div>
+    </div>
+    <div class="box">
+      <div class="ojstage" id="ojStage">
+        <canvas id="ojCv" aria-label="Animasi motor ojol melaju di jalan"></canvas>
+        <div class="ojov" id="ojStart"><div>
+          <h2>OJOL RUSH</h2>
+          <p>Setiap huruf yang benar bikin motor makin ngebut dan setiap kata = 1 orderan terantar. Pilih waktu, lalu tekan mulai.</p>
+          <button class="btn" id="ojGo" type="button">MULAI NARIK</button>
+        </div></div>
+        <div class="ojov" id="ojEnd" hidden><div class="result" style="padding:0">
+          <h2>SHIFT SELESAI</h2>
+          <div class="badge" id="ojBadge" hidden>Rekor baru!</div>
+          <div class="big"><span id="ojRDist">0</span><small>meter</small></div>
+          <div class="acc" id="ojRStars"></div>
+          <div class="rgrid">
+            <div><span>Orderan</span><strong id="ojROrd"></strong></div>
+            <div><span>KPM / WPM</span><strong id="ojRWpm"></strong></div>
+            <div><span>Akurasi</span><strong id="ojRAcc"></strong></div>
+            <div><span>Tip</span><strong id="ojRTip"></strong></div>
+            <div><span>Rata-rata</span><strong id="ojRAvg"></strong></div>
+            <div><span>Rekor</span><strong id="ojRBest"></strong></div>
+          </div>
+          <div class="btns"><button class="btn" id="ojAgain" type="button">Narik lagi</button></div>
+        </div></div>
+      </div>
+      <div class="ojword" id="ojWord">&nbsp;</div>
+      <div class="ojnext" id="ojNext"></div>
+      <input class="ojin" id="ojIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Ketik kata di atas..." aria-label="Ketik kata" disabled>
+      <p class="hint">Esc untuk menyudahi shift lebih awal. Rekor tersimpan di browser ini saja.</p>
+    </div>
+  </section>
+
 </main>
-<footer class="foot"><div class="foot-in">
-  <p>TYPE INDONESIA · Latih ketikanmu setiap hari</p>
-  <div class="social"><span class="fl2" data-en="Contact us">Hubungi kami</span>
-    <a class="sbtn wa" href="https://wa.me/6285891508250" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp 085891508250"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a>
-    <a class="sbtn ig" href="https://www.instagram.com/ridwan_dkc/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @ridwan_dkc"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span>@ridwan_dkc</span></a>
-  </div></div></footer>
 <div id="ck" hidden><p>Website ini menyimpan preferensi dan hasil tes di localStorage browsermu.</p><button class="btn" id="ckOk" type="button">Mengerti</button></div>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -382,7 +429,7 @@ mark{background:var(--acc-soft);color:var(--ink);border-radius:5px;padding:0 4px
   <div class="mbox">
     <button class="ibtn mclose" id="lgClose" type="button" aria-label="Tutup">✕</button>
     <h2 id="lgTitle">Login</h2>
-    <p class="sub">Masukan akun anda.</p>
+    <p class="sub">Masuk dengan akun kamu.</p>
     <div class="f">
       <label>Email<input class="in" id="lgEmail" type="email" autocomplete="email" placeholder="nama@email.com"></label>
       <label>Password<span class="pw"><input class="in" id="lgPass" type="password" autocomplete="current-password" placeholder="Password"><button class="eye" id="lgEye" type="button" aria-label="Tampilkan password">👁</button></span></label>
@@ -682,7 +729,7 @@ document.getElementById("loginBtn").addEventListener("click",function(){if(windo
   });
 
   /* ========== NAVIGASI ========== */
-  var PAGES = ["typing","competition","practice","multiplayer","custom","hangout","blog","faq","feedback","translate","footprint","privacy","cookies","links","statistik","tentang"];
+  var PAGES = ["typing","ojol","competition","practice","multiplayer","custom","hangout","blog","faq","feedback","translate","footprint","privacy","cookies","links","statistik","tentang"];
   var side = $("side"), scrim = $("scrim");
   function curPage() {
     var n = (location.hash || "#typing").slice(1);
@@ -770,7 +817,7 @@ document.getElementById("loginBtn").addEventListener("click",function(){if(windo
   /* ========== MENU & HALAMAN BARU ========== */
   var NAME_KEY = "typeindonesia_name", CHK = "typeindonesia_chat", FBK = "typeindonesia_feedback", MPK = "typeindonesia_mp", LANG_KEY = "typeindonesia_lang", CK_KEY = "typeindonesia_consent";
   var EN = ("the be to of and have it for not with you this but from they say her she will one all would there their what so out about who get which when make can like time just know take people into year good some could them see other than then now look only come over think also back after use two how work first well way even new want because any give day most another because against without together children something government question important through between").split(" ");
-  var NAV = [["PERMAINAN","GAMES",[["typing","Tes Mengetik","Typing Test"],["competition","Kompetisi","Competition"],["practice","Teks Latihan","Practice Texts"],["multiplayer","Multiplayer","Multiplayer"],["custom","Mode Kustom","Custom Mode"],["hangout","Hangout","Hangout"],["statistik","Statistik","Statistics"],["tentang","Tentang","About"]]],
+  var NAV = [["PERMAINAN","GAMES",[["typing","Tes Mengetik","Typing Test"],["competition","Kompetisi","Competition"],["practice","Teks Latihan","Practice Texts"],["multiplayer","Multiplayer","Multiplayer"],["custom","Mode Kustom","Custom Mode"],["ojol","Ojol Rush","Ojol Rush"],["hangout","Hangout","Hangout"],["statistik","Statistik","Statistics"],["tentang","Tentang","About"]]],
     ["BANTUAN","HELP",[["blog","Blog","Blog"],["faq","FAQ","FAQ"],["feedback","Masukan","Feedback"],["translate","Terjemahkan","Translate"]]],
     ["LEGAL","LEGAL",[["footprint","Jejak","Footprint"],["privacy","Privasi","Privacy"],["cookies","Kebijakan Cookie","Cookie Policy"]]],
     ["LINKS","LINKS",[["links","Build, Launch and Grow","Build, Launch and Grow"],["links","Brain Training Games","Brain Training Games"],["links","Mobile Typing App","Mobile Typing App"],["links","Online Text Tools","Online Text Tools"]]]];
@@ -949,7 +996,7 @@ document.getElementById("loginBtn").addEventListener("click",function(){if(windo
   $("lgGrp").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) applyLang(b.dataset.l); });
 
   /* Jejak */
-  var FOOT_KEYS = [STORE_KEY, NAME_KEY, CHK, FBK, MPK, THEME_KEY, LANG_KEY, CK_KEY];
+  var FOOT_KEYS = ["typeindonesia_ojol", STORE_KEY, NAME_KEY, CHK, FBK, MPK, THEME_KEY, LANG_KEY, CK_KEY];
   function renderFoot() {
     var r = loadResults(), f = function (x) { return new Date(x.date).toLocaleDateString("id-ID"); };
     $("footBox").innerHTML = "<p>Total tes tersimpan: <b>" + r.length + "</b>" + (r.length ? ". Pertama: " + f(r[0]) + ", terakhir: " + f(r[r.length - 1]) : "") + ".</p><table><thead><tr><th>Kunci localStorage</th><th>Isi</th></tr></thead><tbody>" +
@@ -1195,5 +1242,317 @@ getRedirectResult(auth)
   .then((r) => { if (r && r.user) toast("Login berhasil"); })
   .catch((e) => { console.error("getRedirectResult:", e.code, e); toast("Login dengan Google gagal. " + errorText(e.code), true); });
 </script>
+<script>
+/* ========== OJOL RUSH ========== */
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var cv = $("ojCv"), ctx = cv.getContext("2d"), inp = $("ojIn");
+  var KEY = "typeindonesia_ojol";
+  var WORDS = ("orderan jalan macet helm bensin gas ngebut antar paket alamat pelanggan bintang tujuan lampu merah " +
+    "belok kanan kiri lurus pasar kampus sekolah rumah kantor makan minum hujan jaket motor rem tikungan gang " +
+    "kilat cepat tepat aman santai sampai terima kasih jemput parkir tanjakan lubang jembatan mampir kopi bakso " +
+    "nasi goreng ayam sate teh gula sambal bungkus pesan tunggu selamat pagi siang malam kota bundaran simpang " +
+    "ojek cuaca basah pelan kencang taman toko sungai desa tugas hadiah harga uang kerja usaha hasil rencana " +
+    "tenang senang sehat segar semangat berani sabar rapi bersih ramah lancar mulus").split(" ");
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* konstanta dunia 3D semu */
+  var NEAR = 6, VIEW = 220, PB = 0.88, BZ = NEAR / PB, LANE = 0.62;
+  var W = 0, H = 0, HOR = 0, K = 1, raf = 0, last = 0, P = null, sky = [];
+  var S = { run: false, dur: 60, t: 0, dist: 0, zc: 0, speed: 24, curve: 0, lean: 0, orders: 0, combo: 0, ok: 0, bad: 0, tip: 0,
+            word: "", pos: 0, queue: [], shake: 0, hop: 0, lane: 0, bx: 0, laneT: 2, carT: 1, nz: 0,
+            pops: [], fx: [], decor: [], cars: [] };
+
+  var rnd = function (a, b) { return a + Math.random() * (b - a); };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+
+  /* ---------- warna: ikut tema web (variabel CSS) ---------- */
+  function rgb(h) { h = h.replace("#", ""); if (h.length === 3) h = h.replace(/./g, "$&$&"); return [parseInt(h.substr(0, 2), 16), parseInt(h.substr(2, 2), 16), parseInt(h.substr(4, 2), 16)]; }
+  function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+  function css(c, a) { return "rgba(" + (c[0] | 0) + "," + (c[1] | 0) + "," + (c[2] | 0) + "," + (a == null ? 1 : a) + ")"; }
+  function lum(c) { return (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255; }
+  function pal() {
+    var cs = getComputedStyle(document.documentElement);
+    var g = function (n) { return rgb(cs.getPropertyValue(n).trim() || "#888888"); };
+    var bg = g("--bg"), card = g("--card"), ink = g("--ink"), acc = g("--acc"), ok = g("--ok"), bad = g("--bad"), mut = g("--mut");
+    var dark = lum(bg) < 0.4, blk = [0, 0, 0], wht = [255, 255, 255];
+    var road = dark ? mix(bg, blk, 0.45) : mix(ink, bg, 0.2);
+    P = { dark: dark, bg: bg, ink: ink, acc: acc, ok: ok, bad: bad,
+      skyT: mix(bg, acc, dark ? 0.3 : 0.42), skyB: mix(bg, acc, 0.1),
+      g1: mix(bg, ok, dark ? 0.2 : 0.38), g2: mix(bg, ok, dark ? 0.14 : 0.3),
+      r1: road, r2: mix(road, wht, 0.05),
+      bld: [mix(bg, ink, dark ? 0.16 : 0.3), mix(bg, ink, dark ? 0.1 : 0.22), mix(bg, acc, dark ? 0.2 : 0.18)],
+      far: mix(P_skyB(bg, acc), ink, dark ? 0.1 : 0.16),
+      tree: mix(ok, blk, 0.25), house: mix(card, acc, 0.18),
+      cars: [mix(acc, wht, 0.1), bad, ok, mix(mut, bg, 0.2)],
+      jacket: ok, helmet: mix(acc, wht, 0.6) };
+  }
+  function P_skyB(bg, acc) { return mix(bg, acc, 0.1); }
+
+  /* ---------- ukuran kanvas ---------- */
+  function resize() {
+    var r = cv.getBoundingClientRect(); if (!r.width) return;
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+    HOR = H * 0.36; K = H / 300;
+    sky = []; var x = 0; while (x < W * 1.8) { var w = rnd(14, 38); sky.push({ x: x, w: w, h: rnd(10, 46) }); x += w + rnd(0, 6); }
+    sky.span = x;
+  }
+
+  /* ---------- proyeksi perspektif ---------- */
+  var maxHalf = function () { return W * 0.46; };
+  function curveAt(z) { return Math.sin(z * 0.0032) * 0.55 + Math.sin(z * 0.0011 + 1.3) * 0.35; }
+  function shiftAt(dz, p) { return (curveAt(S.zc + dz) - S.curve) * W * 0.9 * (1 - p); }
+  function proj(z, lat) {
+    var dz = z - S.zc; if (dz < NEAR * 0.92 || dz > VIEW) return null;
+    var p = NEAR / dz, half = maxHalf() * p;
+    return { x: W / 2 + shiftAt(dz, p) + lat * half, y: HOR + (H - HOR) * p, p: p, s: p * K };
+  }
+
+  /* ---------- dunia ---------- */
+  function spawnDecor(z) {
+    var side = Math.random() < 0.5 ? -1 : 1, r = Math.random(), o = { z: z, lat: side * rnd(1.35, 2.2) };
+    if (r < 0.45) { o.k = "b"; o.w = rnd(50, 90); o.h = rnd(70, 170); o.c = Math.floor(Math.random() * 3); o.id = Math.floor(Math.random() * 9); }
+    else if (r < 0.75) { o.k = "t"; o.w = rnd(26, 36); o.h = rnd(46, 66); }
+    else { o.k = "l"; o.lat = side * 1.17; }
+    S.decor.push(o);
+  }
+  function spawnDest() {
+    var side = Math.random() < 0.5 ? -1 : 1;
+    S.decor.push({ k: "h", z: S.zc + BZ + 48, lat: side * 1.5, dest: true, done: false });
+  }
+  function resetWorld() {
+    S.decor = []; S.cars = []; S.pops = []; S.fx = []; S.nz = S.zc;
+    while (S.nz < S.zc + VIEW) { spawnDecor(S.nz); S.nz += rnd(9, 20); }
+  }
+
+  /* ---------- gambar ---------- */
+  function drawSky(t) {
+    var g = ctx.createLinearGradient(0, 0, 0, HOR); g.addColorStop(0, css(P.skyT)); g.addColorStop(1, css(P.skyB));
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, HOR + 2);
+    if (P.dark) { ctx.fillStyle = "rgba(255,255,255,.7)"; for (var i = 0; i < 26; i++) ctx.fillRect((i * 97.3) % W, (i * 53.7) % (HOR * 0.8), 1.5, 1.5); }
+    var mx = W * 0.72 - S.curve * W * 0.12, my = HOR * 0.4, mc = mix(P.acc, [255, 255, 255], 0.7);
+    ctx.fillStyle = css(mc, 0.18); ctx.beginPath(); ctx.arc(mx, my, 40 * K, 0, 7); ctx.fill();
+    ctx.fillStyle = css(mc, 0.95); ctx.beginPath(); ctx.arc(mx, my, 22 * K, 0, 7); ctx.fill();
+    var off = -S.curve * W * 0.35; ctx.fillStyle = css(P.far);
+    sky.forEach(function (b) { var px = (((b.x + off) % sky.span) + sky.span) % sky.span - W * 0.4; if (px < W) ctx.fillRect(px, HOR - b.h * K, b.w, b.h * K + 1); });
+  }
+  function drawRoad() {
+    var step = 3, ph = H - HOR;
+    for (var y = HOR; y < H; y += step) {
+      var p = Math.max(0.02, (y + step / 2 - HOR) / ph), dz = NEAR / p, wz = S.zc + dz, a = Math.floor(wz / 9) & 1;
+      ctx.fillStyle = css(a ? P.g1 : P.g2); ctx.fillRect(0, y, W, step + 1);
+      var half = maxHalf() * p, cx = W / 2 + shiftAt(dz, p);
+      ctx.fillStyle = css(a ? P.r1 : P.r2); ctx.fillRect(cx - half, y, half * 2, step + 1);
+      var lw = Math.max(1, half * 0.035); ctx.fillStyle = css(P.acc, 0.9);
+      ctx.fillRect(cx - half, y, lw, step + 1); ctx.fillRect(cx + half - lw, y, lw, step + 1);
+      if (Math.floor(wz / 5) & 1) { var dw = Math.max(1, half * 0.02); ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.fillRect(cx - half * 0.31 - dw / 2, y, dw, step + 1); ctx.fillRect(cx + half * 0.31 - dw / 2, y, dw, step + 1); }
+    }
+    var hz = ctx.createLinearGradient(0, HOR, 0, HOR + ph * 0.28); hz.addColorStop(0, css(P.skyB, 1)); hz.addColorStop(1, css(P.skyB, 0));
+    ctx.fillStyle = hz; ctx.fillRect(0, HOR, W, ph * 0.28);
+  }
+  function drawObj(o, t) {
+    var q = proj(o.z, o.lat); if (!q) return; var s = q.s, x = q.x, y = q.y, w, h;
+    if (o.k === "b") {
+      w = o.w * s; h = o.h * s; ctx.fillStyle = css(P.bld[o.c]); ctx.fillRect(x - w / 2, y - h, w, h);
+      if (P.dark) {
+        ctx.fillStyle = css(P.acc, 0.55); var cw = Math.max(2, 6 * s), gp = cw * 2.3;
+        for (var j = 0; y - h + gp * (j + 0.6) < y - gp * 0.8; j++) for (var i = 0; gp * (i + 0.5) < w - cw; i++) if ((i * 7 + j * 3 + o.id) % 5 < 2) ctx.fillRect(x - w / 2 + gp * (i + 0.5), y - h + gp * (j + 0.6), cw, cw * 1.3);
+      } else { ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(x - w / 2, y - h, w, Math.max(2, 6 * s)); }
+    } else if (o.k === "t") {
+      ctx.fillStyle = "#5a3d28"; ctx.fillRect(x - 3 * s, y - 22 * s, 6 * s, 22 * s);
+      ctx.fillStyle = css(P.tree); ctx.beginPath(); ctx.arc(x, y - o.h * s * 0.62, o.w * s * 0.62, 0, 7); ctx.fill();
+    } else if (o.k === "l") {
+      ctx.fillStyle = css(P.dark ? P.ink : P.r1, 0.8); ctx.fillRect(x - 1.5 * s, y - 70 * s, 3 * s, 70 * s);
+      if (P.dark) { ctx.fillStyle = css(P.acc, 0.2); ctx.beginPath(); ctx.arc(x, y - 72 * s, 24 * s, 0, 7); ctx.fill(); }
+      ctx.fillStyle = css(P.dark ? P.acc : P.ink, 1); ctx.beginPath(); ctx.arc(x, y - 72 * s, 6 * s, 0, 7); ctx.fill();
+    } else if (o.k === "h") {
+      w = 74 * s; h = 46 * s; ctx.fillStyle = css(P.house); ctx.fillRect(x - w / 2, y - h, w, h);
+      ctx.fillStyle = css(P.acc); ctx.beginPath(); ctx.moveTo(x - w * 0.6, y - h); ctx.lineTo(x, y - h - 26 * s); ctx.lineTo(x + w * 0.6, y - h); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = css(P.ink, 0.5); ctx.fillRect(x - 7 * s, y - 24 * s, 14 * s, 24 * s);
+      var pb = Math.sin(t * 5) * 5 * s, ps = s * 1.5, py = y - h - 62 * s + pb;
+      ctx.fillStyle = css(P.bad); ctx.beginPath(); ctx.arc(x, py, 11 * ps, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x - 8 * ps, py + 6 * ps); ctx.lineTo(x, py + 24 * ps); ctx.lineTo(x + 8 * ps, py + 6 * ps); ctx.fill();
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, py, 4.5 * ps, 0, 7); ctx.fill();
+    } else if (o.k === "pit") {
+      ctx.fillStyle = "rgba(0,0,0,.55)"; ctx.beginPath(); ctx.ellipse(x, y, 26 * s, 8 * s, 0, 0, 7); ctx.fill();
+    } else if (o.k === "car") {
+      w = 62 * s; h = 34 * s;
+      ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.beginPath(); ctx.ellipse(x, y, w * 0.6, 5 * s, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = "#0b0b12"; ctx.fillRect(x - w / 2 + 3 * s, y - h * 0.22, 9 * s, h * 0.22); ctx.fillRect(x + w / 2 - 12 * s, y - h * 0.22, 9 * s, h * 0.22);
+      var cc = P.cars[o.ci]; ctx.fillStyle = css(cc); ctx.fillRect(x - w / 2, y - h * 0.72, w, h * 0.55);
+      ctx.fillStyle = css(mix(cc, [0, 0, 0], 0.25)); ctx.fillRect(x - w * 0.34, y - h * 1.05, w * 0.68, h * 0.36);
+      ctx.fillStyle = "rgba(10,12,24,.75)"; ctx.fillRect(x - w * 0.28, y - h * 0.98, w * 0.56, h * 0.24);
+      ctx.fillStyle = css(P.bad); ctx.fillRect(x - w / 2 + 3 * s, y - h * 0.6, 11 * s, 6 * s); ctx.fillRect(x + w / 2 - 14 * s, y - h * 0.6, 11 * s, 6 * s);
+    }
+  }
+  function drawBike(t) {
+    var half = maxHalf() * PB, x = W / 2 + S.bx * half, s = PB * K * 1.2;
+    var y = HOR + (H - HOR) * PB - Math.sin(Math.min(1, S.hop) * Math.PI) * 26 * K;
+    var sh = S.shake ? Math.sin(t * 70) * 3 * (S.shake / 0.3) : 0;
+    ctx.fillStyle = "rgba(0,0,0,.3)"; ctx.beginPath(); ctx.ellipse(x, HOR + (H - HOR) * PB, 38 * s, 7 * s, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.translate(x + sh, y); ctx.rotate(S.lean); ctx.scale(s, s);
+    ctx.fillStyle = "#0b0b12"; ctx.fillRect(-6, -26, 12, 26);
+    ctx.fillStyle = css(mix(P.acc, [255, 255, 255], 0.55)); ctx.fillRect(-17, -50, 34, 26);
+    ctx.fillStyle = css(P.bad); ctx.fillRect(-9, -42, 18, 5);
+    ctx.fillStyle = css(P.jacket); ctx.fillRect(-19, -122, 38, 44);
+    ctx.fillStyle = css(P.helmet); ctx.beginPath(); ctx.arc(0, -134, 12, 0, 7); ctx.fill();
+    ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.fillRect(-12, -136, 24, 3);
+    ctx.fillStyle = "#1a1a24"; ctx.fillRect(-36, -118, 16, 4); ctx.fillRect(20, -118, 16, 4);
+    ctx.fillStyle = css(P.acc); ctx.fillRect(-31, -98, 62, 46);
+    ctx.fillStyle = "rgba(0,0,0,.22)"; ctx.fillRect(-31, -76, 62, 4);
+    ctx.fillStyle = "rgba(255,255,255,.55)"; ctx.fillRect(-14, -90, 28, 9);
+    ctx.restore();
+  }
+  function draw(t) {
+    ctx.save();
+    if (S.shake && !reduce) ctx.translate(rnd(-1, 1) * 5 * (S.shake / 0.3), rnd(-1, 1) * 4 * (S.shake / 0.3));
+    drawSky(t); drawRoad();
+    var list = S.decor.concat(S.cars).sort(function (a, b) { return b.z - a.z; });
+    list.forEach(function (o) { drawObj(o, t); });
+    if (S.speed > 50 && !reduce) {
+      ctx.strokeStyle = "rgba(255,255,255," + ((S.speed - 50) / 140).toFixed(2) + ")"; ctx.lineWidth = 2;
+      var vx = W / 2, vy = HOR + 4;
+      for (var i = 0; i < 9; i++) { var an = rnd(0.2, Math.PI - 0.2), r0 = rnd(0.25, 0.6) * W * 0.5, r1 = r0 + rnd(30, 90);
+        ctx.beginPath(); ctx.moveTo(vx + Math.cos(an) * r0 * 1.4, vy + Math.sin(an) * r0 * 0.7); ctx.lineTo(vx + Math.cos(an) * r1 * 1.4, vy + Math.sin(an) * r1 * 0.7); ctx.stroke(); }
+    }
+    drawBike(t);
+    S.fx.forEach(function (f) {
+      var u = clamp(f.t, 0, 1), x = f.sx + (f.ex - f.sx) * u, y = f.sy + (f.ey - f.sy) * u - Math.sin(u * Math.PI) * 70 * K, z = 14 * K * (1 - u * 0.4);
+      ctx.save(); ctx.translate(x, y); ctx.rotate(u * 9); ctx.fillStyle = css(P.acc); ctx.fillRect(-z / 2, -z / 2, z, z); ctx.restore();
+    });
+    ctx.font = "700 " + Math.round(18 * Math.max(K, 0.8)) + "px system-ui, sans-serif"; ctx.textAlign = "center";
+    S.pops.forEach(function (p) { ctx.globalAlpha = clamp(p.life, 0, 1); ctx.fillStyle = css(p.col); ctx.fillText(p.txt, p.x, p.y); });
+    ctx.globalAlpha = 1; ctx.restore();
+  }
+
+  /* ---------- update ---------- */
+  function pop(txt, col, x, y) { S.pops.push({ txt: txt, col: col, x: x == null ? W / 2 : x, y: y == null ? H * 0.62 : y, life: 1 }); }
+  function danger(l) { var bz = S.zc + BZ; return S.cars.some(function (c) { var d = c.z - bz; return c.lane === l && d > -4 && d < 42; }); }
+  function update(dt) {
+    if (S.run) {
+      S.t += dt; S.speed = Math.max(5, S.speed - (4 + S.speed * 0.08) * dt); S.dist += S.speed / 3.6 * dt;
+      if (S.t >= S.dur) end();
+    } else S.speed += (24 - S.speed) * Math.min(1, dt * 2);
+    S.zc += S.speed / 3.6 * 1.5 * dt; S.curve = curveAt(S.zc);
+    while (S.nz < S.zc + VIEW) { spawnDecor(S.nz); S.nz += rnd(9, 20); }
+    var lim = S.zc + NEAR * 0.9;
+    S.decor = S.decor.filter(function (o) { return o.z > lim; });
+    S.carT -= dt;
+    if (S.carT <= 0) {
+      var ln = Math.floor(Math.random() * 3) - 1;
+      if (!S.cars.some(function (c) { return c.lane === ln && c.z > S.zc + VIEW * 0.6; })) S.cars.push({ k: "car", z: S.zc + VIEW * 0.95, lane: ln, lat: ln * LANE, v: rnd(7, 18), ci: Math.floor(Math.random() * 4) });
+      S.carT = rnd(1, 2.4);
+    }
+    S.cars.forEach(function (c) { c.z += c.v * dt; }); S.cars = S.cars.filter(function (c) { return c.z > lim; });
+    /* setir otomatis: nyalip mobil, geser jalur biar hidup */
+    S.laneT -= dt;
+    var cand = [S.lane - 1, S.lane + 1].filter(function (l) { return l >= -1 && l <= 1 && !danger(l); });
+    if (danger(S.lane) && cand.length) { S.lane = cand[Math.floor(Math.random() * cand.length)]; S.laneT = rnd(1.5, 3); }
+    else if (S.laneT <= 0) { if (cand.length) S.lane = cand[Math.floor(Math.random() * cand.length)]; S.laneT = rnd(2, 4); }
+    var tx = S.lane * LANE; S.bx += (tx - S.bx) * Math.min(1, dt * 4.5);
+    S.lean = clamp((tx - S.bx) * 0.9, -0.3, 0.3) + (curveAt(S.zc + 25) - S.curve) * 0.9;
+    S.hop = Math.max(0, S.hop - dt * 3); S.shake = Math.max(0, S.shake - dt);
+    S.decor.forEach(function (o) {
+      if (o.dest && !o.done && o.z < S.zc + BZ + 1.5) {
+        o.done = true; var q = proj(o.z, o.lat);
+        if (q) S.fx.push({ t: 0, sx: W / 2 + S.bx * maxHalf() * PB, sy: HOR + (H - HOR) * PB - 80 * K, ex: q.x, ey: q.y - 20 * q.s });
+      }
+    });
+    S.fx.forEach(function (f) { f.t += dt / 0.5; if (f.t >= 1 && !f.d) { f.d = true; pop("Terkirim! ✓", P.ok, f.ex, f.ey - 20); } });
+    S.fx = S.fx.filter(function (f) { return f.t < 1.05; });
+    S.pops.forEach(function (p) { p.y -= 40 * dt; p.life -= dt * 0.9; });
+    S.pops = S.pops.filter(function (p) { return p.life > 0; });
+    $("ojT").textContent = Math.max(0, Math.ceil(S.dur - S.t));
+    $("ojTBox").classList.toggle("low", S.run && S.dur - S.t <= 10);
+    $("ojSpd").textContent = Math.round(S.speed); $("ojDist").textContent = Math.round(S.dist);
+    $("ojOrd").textContent = S.orders; $("ojCmb").textContent = S.combo;
+  }
+  function frame(ts) {
+    var dt = Math.min((ts - last) / 1000 || 0, 0.05); last = ts;
+    if (!W) resize();
+    if (W) { update(dt); draw(ts / 1000); }
+    raf = requestAnimationFrame(frame);
+  }
+
+  /* ---------- alur game ---------- */
+  function pick() { var w; do { w = WORDS[Math.floor(Math.random() * WORDS.length)]; } while (w === S.word || S.queue.indexOf(w) >= 0); return w; }
+  function renderWord() {
+    $("ojWord").innerHTML = '<span class="k">' + S.word.slice(0, S.pos) + "</span>" + S.word.slice(S.pos);
+    $("ojNext").textContent = S.queue.slice(0, 3).join("   ·   ");
+  }
+  function nextWord() { S.word = S.queue.shift(); S.queue.push(pick()); S.pos = 0; inp.value = ""; renderWord(); }
+  function start() {
+    S.run = true; S.t = 0; S.dist = 0; S.speed = 10; S.orders = 0; S.combo = 0; S.ok = 0; S.bad = 0; S.tip = 0; S.word = ""; S.shake = 0; S.hop = 0;
+    resetWorld(); S.queue = [pick(), pick(), pick(), pick()];
+    $("ojStart").hidden = true; $("ojEnd").hidden = true; inp.disabled = false; $("ojBadge").hidden = true;
+    nextWord(); inp.focus();
+  }
+  function stopUI() { inp.disabled = true; inp.value = ""; inp.blur(); }
+  function abort() { S.run = false; stopUI(); $("ojStart").hidden = false; $("ojEnd").hidden = true; }
+  function end() {
+    S.run = false; stopUI();
+    var total = S.ok + S.bad, acc = total ? Math.round(S.ok / total * 100) : 0, wpm = Math.round((S.ok / 5) / (S.dur / 60)), avg = Math.round(S.dist / S.dur * 3.6);
+    var stars = avg < 20 ? 1 : avg < 35 ? 2 : avg < 50 ? 3 : avg < 65 ? 4 : 5, rec = {}, newBest = false;
+    try { rec = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { rec = {}; }
+    var prev = +rec[S.dur] || 0;
+    if (S.dist > prev) { rec[S.dur] = Math.round(S.dist); newBest = prev > 0; try { localStorage.setItem(KEY, JSON.stringify(rec)); } catch (e) {} }
+    $("ojRDist").textContent = Math.round(S.dist); $("ojRStars").textContent = "★".repeat(stars) + "☆".repeat(5 - stars);
+    $("ojROrd").textContent = S.orders; $("ojRWpm").textContent = wpm; $("ojRAcc").textContent = acc + "%";
+    $("ojRTip").textContent = "Rp" + S.tip.toLocaleString("id-ID"); $("ojRAvg").textContent = avg + " km/j";
+    $("ojRBest").textContent = Math.max(prev, Math.round(S.dist)) + " m";
+    $("ojBadge").hidden = !newBest; $("ojEnd").hidden = false;
+  }
+
+  inp.addEventListener("input", function () {
+    if (!S.run) { inp.value = ""; return; }
+    var v = inp.value.toLowerCase().replace(/\s/g, "");
+    if (S.word.indexOf(v) === 0) {
+      for (var i = v.length - S.pos; i > 0; i--) { S.ok++; S.speed = Math.min(120, S.speed + 1.6 + Math.min(S.combo, 10) * 0.08); }
+      S.pos = v.length;
+      if (v === S.word) {
+        S.orders++; S.combo++; S.speed = Math.min(120, S.speed + 6);
+        var tip = 1000 * (1 + Math.floor(S.combo / 5)); S.tip += tip;
+        pop("+Rp" + tip.toLocaleString("id-ID"), P.acc); spawnDest(); nextWord(); return;
+      }
+      renderWord();
+    } else {
+      S.bad++; S.combo = 0; S.speed = Math.max(5, S.speed - 10);
+      if (!reduce) { S.shake = 0.3; S.hop = 1; }
+      S.decor.push({ k: "pit", z: S.zc + BZ + 4, lat: S.bx });
+      pop("Kena lubang!", P.bad);
+      var w = $("ojWord"); w.classList.remove("err"); void w.offsetWidth; w.classList.add("err");
+      inp.value = S.word.slice(0, S.pos);
+    }
+  });
+
+  /* ---------- UI & lifecycle ---------- */
+  $("ojDur").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-v]"); if (!b || S.run) return;
+    S.dur = parseInt(b.dataset.v, 10);
+    $("ojDur").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    $("ojT").textContent = S.dur;
+  });
+  $("ojGo").addEventListener("click", start);
+  $("ojAgain").addEventListener("click", start);
+  $("ojStage").addEventListener("click", function () { if (S.run) inp.focus(); });
+  document.addEventListener("keydown", function (e) {
+    if (location.hash !== "#ojol") return;
+    if (e.key === "Escape" && S.run) { e.preventDefault(); S.t = S.dur; }
+    else if (e.key === "Enter" && !S.run && !/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test((document.activeElement || {}).tagName || "")) { e.preventDefault(); start(); }
+  });
+  function onRoute() {
+    if (location.hash === "#ojol") { if (!raf) { resize(); last = performance.now(); raf = requestAnimationFrame(frame); } }
+    else { if (S.run) abort(); if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  }
+  window.addEventListener("hashchange", onRoute);
+  window.addEventListener("resize", function () { if (raf) resize(); });
+  new MutationObserver(pal).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  pal(); resetWorld(); inp.disabled = true; $("ojT").textContent = S.dur;
+  onRoute();
+})();
+</script>
+
 </body>
 </html>
